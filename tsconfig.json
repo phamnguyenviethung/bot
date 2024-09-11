@@ -1,18 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "outDir": "build",
+    "module": "CommonJS", // required
+    "target": "es6", // required
     "rootDir": "src",
-    "strict": true,
-    "moduleResolution": "Node",
-    "allowSyntheticDefaultImports": true,
-
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": false,
-
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "outDir": "dist",
+    "emitDecoratorMetadata": false, // required
+    "experimentalDecorators": true, // required,
+    "moduleDetection": "force"
   },
-  "exclude": ["build", "node_modules"]
+  "paths": {
+    "@/*": ["src/*"],
+    "@utils/*": ["src/utils/*"],
+    "@core/*": ["src/core/*"]
+  }
 }
