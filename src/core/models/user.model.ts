@@ -26,6 +26,16 @@ const UserSchema = new Schema(
       min: [1000, 'Chỉ có 4 chữ số'],
       max: [9999, 'Chỉ có 4 chữ số'],
     },
+    money: {
+      type: BigInt,
+      default: 0,
+      min: [0, 'Không thể có số âm'],
+    },
+    coin: {
+      type: BigInt,
+      default: 0,
+      min: [0, 'Không thể có số âm'],
+    },
     role: {
       type: String,
       default: Role.User,

@@ -9,6 +9,8 @@ class UserService extends BaseServiceAbstract<typeof User> {
     const repo: UserRepositoryInterface = new UserRepo();
     super(repo);
   }
+
+
 }
 
 export default UserService;

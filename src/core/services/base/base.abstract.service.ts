@@ -15,15 +15,18 @@ export abstract class BaseServiceAbstract<T>
   async getAll(filter?: object, options?: object): Promise<FindAllResponse<T>> {
     return await this.repo.getAll(filter, options);
   }
-  async getOne(id: string) {
+  async getOne(filter?: object, projection?: string): Promise<T> {
+    return await this.repo.getOne(filter, projection);
+  }
+  async getByID(id: string): Promise<T> {
     return await this.repo.getByID(id);
   }
 
-  async update(id: string, update_dto: Partial<T>) {
+  async update(id: string, update_dto: Partial<T>): Promise<T> {
     return await this.repo.update(id, update_dto);
   }
 
-  async permanentlyDelete(id: string) {
+  async permanentlyDelete(id: string): Promise<boolean> {
     return await this.repo.permanentlyDelete(id);
   }
 }

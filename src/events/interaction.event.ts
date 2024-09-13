@@ -1,6 +1,6 @@
 import { ArgsOf, Client, Discord, On } from 'discordx';
 const { Events } = require('discord.js');
-
+const wsLogger = require('../utils/wsLogger');
 @Discord()
 export class InteractionEvent {
   @On({ event: Events.InteractionCreate })
@@ -9,6 +9,12 @@ export class InteractionEvent {
     client: Client, // Client instance injected here,
     guardPayload: any
   ) {
-    console.log(interaction);
+    try {
+      if (interaction.isChatInputCommand()) {
+      }
+      client.executeInteraction(interaction);
+    } catch (error) {
+      wsLogger.error(error);
+    }
   }
 }

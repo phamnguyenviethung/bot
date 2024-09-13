@@ -1,4 +1,9 @@
-import type { CommandInteraction, Interaction } from 'discord.js';
+import {
+  Collection,
+  type CommandInteraction,
+  type Interaction,
+} from 'discord.js';
+import { MetadataStorage } from 'discordx';
 
 require('dotenv').config();
 const { IntentsBitField } = require('discord.js');
@@ -24,17 +29,13 @@ client.once('ready', async () => {
   await client.initApplicationCommands();
 });
 
-client.on('interactionCreate', async (interaction: Interaction) => {
-  try {
-    client.executeInteraction(interaction);
-  } catch (error) {
-    logger.error(error);
-
-    const cmdIneraction = interaction as CommandInteraction;
-    console.log(cmdIneraction);
-    await cmdIneraction.followUp('Đã có lỗi xảy ra');
-  }
-});
+// client.on('interactionCreate', async (interaction: Interaction) => {
+//   try {
+//     client.executeInteraction(interaction);
+//   } catch (error) {
+//     logger.error(error);
+//   }
+// });
 
 const init = async () => {
   botHandler.loadData();
