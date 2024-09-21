@@ -1,3 +1,5 @@
+import { HydratedDocument } from 'mongoose';
+
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
@@ -27,12 +29,12 @@ const UserSchema = new Schema(
       max: [9999, 'Chỉ có 4 chữ số'],
     },
     money: {
-      type: BigInt,
+      type: Number,
       default: 0,
       min: [0, 'Không thể có số âm'],
     },
     coin: {
-      type: BigInt,
+      type: Number,
       default: 0,
       min: [0, 'Không thể có số âm'],
     },
@@ -56,3 +58,5 @@ UserSchema.pre(/^find/, function (next) {
 
 const User = mongoose.model('User', UserSchema);
 module.exports = User;
+
+export type UserDocument = HydratedDocument<typeof UserSchema>;

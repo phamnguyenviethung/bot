@@ -2,7 +2,7 @@ import { FindAllResponse } from '../../../common/types/common.types';
 
 export interface Write<T> {
   create(item: T | any): Promise<T>;
-  update(id: string, item: Partial<T>, isNew?: boolean): Promise<T>;
+  update(filter: object, data: Partial<T>, isNew?: boolean): Promise<T>;
   permanentlyDelete(id: string): Promise<boolean>;
 }
 

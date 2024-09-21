@@ -1,5 +1,3 @@
-import { Client } from 'discordx';
-
 const logger = require('./wsLogger');
 const fs = require('fs');
 const path = require('path');

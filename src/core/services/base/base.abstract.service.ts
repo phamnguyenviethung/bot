@@ -1,3 +1,4 @@
+import { FilterQuery } from 'mongoose';
 import { FindAllResponse } from '../../../common/types/common.types';
 import { BaseRepositoryInterface } from '../../repositories/base/base.interface.repository';
 import { BaseServiceInterface } from './base.interface.service';
@@ -22,8 +23,8 @@ export abstract class BaseServiceAbstract<T>
     return await this.repo.getByID(id);
   }
 
-  async update(id: string, update_dto: Partial<T>): Promise<T> {
-    return await this.repo.update(id, update_dto);
+  async update(filter: FilterQuery<T>, update_dto: Partial<T>): Promise<T> {
+    return await this.repo.update(filter, update_dto);
   }
 
   async permanentlyDelete(id: string): Promise<boolean> {

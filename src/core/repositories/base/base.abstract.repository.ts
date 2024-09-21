@@ -1,7 +1,12 @@
-import { FilterQuery, Model, QueryOptions } from 'mongoose';
+import {
+  FilterQuery,
+  Model,
+  QueryOptions,
+  Document,
+  HydratedDocument,
+} from 'mongoose';
 import { BaseRepositoryInterface } from './base.interface.repository';
 import { FindAllResponse } from '../../../common/types/common.types';
-
 export abstract class BaseRepositoryAbstract<T>
   implements BaseRepositoryInterface<T>
 {
@@ -15,12 +20,12 @@ export abstract class BaseRepositoryAbstract<T>
   }
 
   async getByID(id: string, projection?: string): Promise<T> {
-    const res = await this.model.findById(id).select(projection);
+    const res = await this.model.findById(id).select(projection).exec();
     return res;
   }
 
   async getOne(condition = {}, projection?: string): Promise<T> {
-    const res = await this.model.findOne(condition).select(projection);
+    const res = await this.model.findOne(condition).select(projection).exec();
     return res;
   }
   async getAll(
@@ -28,12 +33,10 @@ export abstract class BaseRepositoryAbstract<T>
     options?: QueryOptions<T>
   ): Promise<FindAllResponse<T>> {
     const [count, data] = await Promise.all([
-      this.model.countDocuments({ ...condition }),
-      this.model.find(
-        { ...condition, deleted_at: null },
-        options?.projection,
-        options
-      ),
+      this.model.countDocuments({ ...condition }).exec(),
+      this.model
+        .find({ ...condition, deleted_at: null }, options?.projection, options)
+        .exec(),
     ]);
     return {
       count,
@@ -42,11 +45,11 @@ export abstract class BaseRepositoryAbstract<T>
   }
 
   async update(
-    id: string,
+    condition: FilterQuery<T>,
     data: Partial<T>,
     isNew: boolean = true
   ): Promise<T> {
-    return await this.model.findOneAndUpdate({ _id: id }, data, { new: isNew });
+    return await this.model.findOneAndUpdate(condition, data, { new: isNew });
   }
 
   async permanentlyDelete(id: string): Promise<boolean> {

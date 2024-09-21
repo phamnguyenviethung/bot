@@ -4,13 +4,14 @@
     "target": "es6", // required
     "rootDir": "src",
     "outDir": "dist",
-    "emitDecoratorMetadata": false, // required
+    "emitDecoratorMetadata": true, // required
     "experimentalDecorators": true, // required,
-    "moduleDetection": "force"
-  },
-  "paths": {
-    "@/*": ["src/*"],
-    "@utils/*": ["src/utils/*"],
-    "@core/*": ["src/core/*"]
+    "moduleDetection": "force",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@utils/*": ["src/utils/*"],
+      "@core/*": ["src/core/*"]
+    }
   }
 }

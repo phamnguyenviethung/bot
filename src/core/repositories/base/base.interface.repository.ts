@@ -1,3 +1,4 @@
+import { FilterQuery, Model } from 'mongoose';
 import { FindAllResponse } from '../../../common/types/common.types';
 
 export interface BaseRepositoryInterface<T> {
@@ -9,7 +10,7 @@ export interface BaseRepositoryInterface<T> {
 
   getAll(condition: object, options?: object): Promise<FindAllResponse<T>>;
 
-  update(id: string, dto: Partial<T>, isNew?: boolean): Promise<T>;
+  update(filter: FilterQuery<T>, dto: Partial<T>, isNew?: boolean): Promise<T>;
 
   permanentlyDelete(id: string): Promise<boolean>;
 }

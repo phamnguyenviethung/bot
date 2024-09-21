@@ -11,7 +11,7 @@ const { Client } = require('discordx');
 const logger = require('./utils/wsLogger');
 const db = require('./configs/db.config');
 const botHandler = require('./utils/botHandler');
-
+const server = require('@/server/server');
 const client = new Client({
   intents: [
     IntentsBitField.Flags.Guilds,
@@ -39,6 +39,8 @@ client.once('ready', async () => {
 
 const init = async () => {
   botHandler.loadData();
+
+  server.start();
   client.login(process.env.BOT_TOKEN);
 };
 init();
