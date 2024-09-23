@@ -1,15 +1,22 @@
-import { HydratedDocument } from 'mongoose';
+import { Document, model, Model, Schema } from 'mongoose';
 
-const mongoose = require('mongoose');
-
-const Schema = mongoose.Schema;
+export interface IUser extends Document {
+  _id: string;
+  username: string;
+  dID: string;
+  pin: number;
+  money: number;
+  coin: number;
+  role: Role;
+  isActive: boolean;
+}
 
 export enum Role {
   Admin = 'admin',
   User = 'user',
 }
 
-const UserSchema = new Schema(
+const UserSchema = new Schema<IUser>(
   {
     username: {
       type: String,
@@ -50,13 +57,11 @@ const UserSchema = new Schema(
   }
 );
 
-UserSchema.pre(/^find/, function (next) {
+UserSchema.pre(/^find/, function (this: Model<IUser>, next: any) {
   // this points to the current query
   this.find({ isActive: { $ne: false } });
   next();
 });
 
-const User = mongoose.model('User', UserSchema);
+const User = model<IUser>('User', UserSchema);
 module.exports = User;
-
-export type UserDocument = HydratedDocument<typeof UserSchema>;

@@ -3,7 +3,7 @@ import { FindAllResponse } from '../../../common/types/common.types';
 import { BaseRepositoryInterface } from '../../repositories/base/base.interface.repository';
 import { BaseServiceInterface } from './base.interface.service';
 
-export abstract class BaseServiceAbstract<T>
+export abstract class BaseServiceAbstract<T extends Document>
   implements BaseServiceInterface<T>
 {
   constructor(private readonly repo: BaseRepositoryInterface<T>) {
@@ -13,8 +13,9 @@ export abstract class BaseServiceAbstract<T>
   async create(item: T | any): Promise<T> {
     return await this.repo.create(item);
   }
-  async getAll(filter?: object, options?: object): Promise<FindAllResponse<T>> {
-    return await this.repo.getAll(filter, options);
+  async getAll(filter?: object, options?: object): Promise<T[]> {
+    const rs = await this.repo.getAll(filter, options);
+    return rs;
   }
   async getOne(filter?: object, projection?: string): Promise<T> {
     return await this.repo.getOne(filter, projection);

@@ -1,13 +1,7 @@
-import {
-  FilterQuery,
-  Model,
-  QueryOptions,
-  Document,
-  HydratedDocument,
-} from 'mongoose';
+import { FilterQuery, Model, QueryOptions, Document } from 'mongoose';
 import { BaseRepositoryInterface } from './base.interface.repository';
 import { FindAllResponse } from '../../../common/types/common.types';
-export abstract class BaseRepositoryAbstract<T>
+export abstract class BaseRepositoryAbstract<T extends Document>
   implements BaseRepositoryInterface<T>
 {
   constructor(private readonly model: Model<T>) {
@@ -15,7 +9,7 @@ export abstract class BaseRepositoryAbstract<T>
   }
 
   async create(data: T | any): Promise<T> {
-    const res = this.model.create(data);
+    const res = await this.model.create(data);
     return res;
   }
 
@@ -31,17 +25,14 @@ export abstract class BaseRepositoryAbstract<T>
   async getAll(
     condition: FilterQuery<T>,
     options?: QueryOptions<T>
-  ): Promise<FindAllResponse<T>> {
-    const [count, data] = await Promise.all([
-      this.model.countDocuments({ ...condition }).exec(),
-      this.model
-        .find({ ...condition, deleted_at: null }, options?.projection, options)
-        .exec(),
-    ]);
-    return {
-      count,
-      data,
-    };
+  ): Promise<T[]> {
+    const data = await this.model.find(
+      { ...condition, deleted_at: null },
+      options?.projection,
+      options
+    );
+
+    return data;
   }
 
   async update(

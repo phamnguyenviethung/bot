@@ -1,0 +1,31 @@
+### User
+GET http://localhost:4000/users HTTP/1.1
+
+###
+
+GET http://localhost:4000/users/66eea633541a278643517590 HTTP/1.1
+
+###
+
+POST http://localhost:4000/users HTTP/1.1
+content-type: application/json
+
+{
+  "pin": 1234,
+  "username": "string",
+  "dID": "375473573059624972"
+}
+
+###
+
+PATCH http://localhost:4000/users/66eea633541a278643517590 HTTP/1.1
+content-type: application/json
+
+{
+  "pin": 1234
+}
+###
+
+DELETE  http://localhost:4000/users/66efe50cbede4f3666e08ff1 HTTP/1.1
+
+###

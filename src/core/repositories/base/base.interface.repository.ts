@@ -8,7 +8,7 @@ export interface BaseRepositoryInterface<T> {
 
   getOne(condition?: object, projection?: string): Promise<T>;
 
-  getAll(condition: object, options?: object): Promise<FindAllResponse<T>>;
+  getAll(condition: object, options?: object): Promise<T[]>;
 
   update(filter: FilterQuery<T>, dto: Partial<T>, isNew?: boolean): Promise<T>;
 

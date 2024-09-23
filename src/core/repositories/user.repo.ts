@@ -1,12 +1,14 @@
+import { Document, HydratedDocument } from 'mongoose';
+import { IUser } from './../models/user.model';
 import { BaseRepositoryAbstract } from './base/base.abstract.repository';
 import { BaseRepositoryInterface } from './base/base.interface.repository';
 const User = require('../models/user.model');
 
 export interface UserRepositoryInterface
-  extends BaseRepositoryInterface<typeof User> {}
+  extends BaseRepositoryInterface<IUser> {}
 
 class UserRepository
-  extends BaseRepositoryAbstract<typeof User>
+  extends BaseRepositoryAbstract<IUser>
   implements UserRepositoryInterface
 {
   constructor() {

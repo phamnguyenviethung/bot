@@ -1,1 +1,3 @@
-export type FindAllResponse<T> = { count: number; data: T[] };
+import { HydratedDocument } from 'mongoose';
+
+export type FindAllResponse<T> = { data: T[] };

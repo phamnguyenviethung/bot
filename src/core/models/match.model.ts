@@ -1,6 +1,20 @@
-const mongoose = require('mongoose');
+import { Document, model, Schema, Types } from 'mongoose';
 
-const Schema = mongoose.Schema;
+export interface IMatch extends Document {
+  matchDate: Date;
+  team1: Types.ObjectId;
+  team2: Types.ObjectId;
+  defaultRate: number;
+  rate: {
+    name: string;
+    value: number;
+  }[];
+  result: {
+    name: string;
+    value: any;
+  }[];
+  isDone: boolean;
+}
 
 export enum ResultType {
   FirstBlood = 'FirstBlood',
@@ -15,10 +29,12 @@ const MatchSchema = new Schema(
     team1: {
       type: Schema.Types.ObjectId,
       ref: 'Team',
+      default: null,
     },
     team2: {
       type: Schema.Types.ObjectId,
       ref: 'Team',
+      default: null,
     },
     defaultRate: {
       type: Number,
@@ -55,11 +71,5 @@ const MatchSchema = new Schema(
   }
 );
 
-MatchSchema.pre(/^find/, function (next) {
-  // this points to the current query
-  this.find({ isActive: { $ne: false } });
-  next();
-});
-
-const Match = mongoose.model('Match', MatchSchema);
+const Match = model('Match', MatchSchema);
 module.exports = Match;

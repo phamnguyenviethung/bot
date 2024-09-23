@@ -1,24 +1,27 @@
-const mongoose = require('mongoose');
+import { Document, model, Model, Schema } from 'mongoose';
 
-const Schema = mongoose.Schema;
+export interface ITeam extends Document {
+  name: string;
+  logoURL: string;
+  isActive: boolean;
+}
 
-const TeamSchema = new Schema(
+const TeamSchema = new Schema<ITeam>(
   {
     name: String,
     logoURL: String,
-    isActvie: { type: Boolean, default: true },
+    isActive: { type: Boolean, default: true },
   },
-
   {
     timestamps: true,
   }
 );
 
-TeamSchema.pre(/^find/, function (next) {
+TeamSchema.pre(/^find/, function (this: Model<ITeam>, next: any) {
   // this points to the current query
   this.find({ isActive: { $ne: false } });
   next();
 });
 
-const Team = mongoose.model('Team', TeamSchema);
+const Team = model<ITeam>('Team', TeamSchema);
 module.exports = Team;

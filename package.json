@@ -18,6 +18,7 @@
     "@types/node": "^22.5.4",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "cors": "^2.8.5",
     "discord.js": "^14.16.1",
     "discordx": "^11.12.1",
     "dotenv": "^16.4.5",
@@ -28,6 +29,7 @@
     "numeral": "^2.0.6",
     "reflect-metadata": "^0.2.2",
     "routing-controllers": "^0.10.4",
+    "typeorm": "^0.3.20",
     "winston": "^3.14.2"
   },
   "devDependencies": {
