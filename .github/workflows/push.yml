@@ -20,6 +20,7 @@ jobs:
 
       - name: Add VPS to known_hosts
         run: |
+          mkdir -p ~/.ssh
           ssh-keyscan -p 7822 200.69.21.71 >> ~/.ssh/known_hosts
 
       - name: Deploy to VPS using SSH
