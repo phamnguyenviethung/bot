@@ -10,10 +10,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Pull latest code to server
-        run: |
-          cat ~/me.pub >> ~/.ssh/authorized_keys
-          ssh -p 7822 pnviethung@200.69.21.71 'cd ~/bot && git pull origin main'
+      - uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
       - name: Login to Docker Hub
         run: docker login -u pnviethung -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Pull Docker image
