@@ -10,9 +10,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Pull latest code to server
         run: |
           ssh -p 7822 pnviethung@200.69.21.71 'cd ~/bot && git pull origin main'
