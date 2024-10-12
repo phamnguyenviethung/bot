@@ -10,6 +10,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Kill existing SSH agents
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          if [ -S "${SSH_AUTH_SOCK}" ]; then
+          ssh-agent -k
+          fi
       - name: Add host key
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
