@@ -31,7 +31,7 @@ jobs:
 
       - name: Restart Node.js app
         run: |
-          ssh -i private_key user@your-vps-ip << EOF
+          ssh -p 7822 -i private_key user@your-vps-ip << EOF
           cd /cktg-bet
           pm2 restart bot
           EOF
