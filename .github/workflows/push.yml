@@ -10,6 +10,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Add host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p 7822 200.69.21.71 >> ~/.ssh/known_hosts
       - name: Pull latest code to server
         run: |
           ssh -p 7822 pnviethung@200.69.21.71 'cd ~/bot && git pull origin main'
