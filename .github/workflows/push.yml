@@ -9,22 +9,10 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Kill existing SSH agents
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
-          if [ -S "${SSH_AUTH_SOCK}" ]; then
-          ssh-agent -k
-          fi
-      - name: Add host key
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -p 7822 200.69.21.71 >> ~/.ssh/known_hosts
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
+      - uses: actions/checkout@v4
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Pull latest code to server
         run: |
