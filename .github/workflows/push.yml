@@ -18,6 +18,10 @@ jobs:
         with:
           node-version: "20" # Đổi phiên bản Node.js nếu cần
 
+      - name: Add VPS to known_hosts
+        run: |
+          ssh-keyscan -p 7822 200.69.21.71 >> ~/.ssh/known_hosts
+
       - name: Deploy to VPS using SSH
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
