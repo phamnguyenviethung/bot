@@ -24,7 +24,7 @@ jobs:
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key
           chmod 600 private_key
-          ssh -p 7822 -i private_key root@200.69.21.71 << EOF
+          ssh -tt -p 7822 -i private_key root@200.69.21.71 << EOF
           cd /cktg-bet
           git pull origin main
           npm install
