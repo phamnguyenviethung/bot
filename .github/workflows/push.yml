@@ -27,11 +27,11 @@ jobs:
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key
           chmod 600 private_key
-          ssh -p 7822 -i private_key -r . root@200.69.21.71:/cktg-bet
+          ssh -p 7822 -i private_key . root@200.69.21.71:/cktg-bet
 
       - name: Restart Node.js app
         run: |
-          ssh -p 7822 -i private_key user@your-vps-ip << EOF
+          ssh -p 7822 -i private_key root@200.69.21.71 << EOF
           cd /cktg-bet
           pm2 restart bot
           EOF
