@@ -16,7 +16,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          password: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
 
       - name: Login to Docker Hub
