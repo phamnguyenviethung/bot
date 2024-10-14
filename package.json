@@ -3,13 +3,19 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/main.js"
+    "dev": "cross-env NODE_ENV=development nodemon src/main.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "nodemon": "^3.1.7"
+    "better-sqlite3": "^11.3.0",
+    "cross-env": "^7.0.3",
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5",
+    "mongoose": "^8.7.1",
+    "nodemon": "^3.1.7",
+    "winston": "^3.15.0"
   }
 }
