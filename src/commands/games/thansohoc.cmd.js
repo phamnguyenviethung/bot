@@ -29,7 +29,7 @@ module.exports = {
         .setName('sotien')
         .setDescription('Nhập số tiền cược')
         .setRequired(true)
-        .setMinValue(1)
+        .setMinValue(0)
     )
     .addStringOption((option) =>
       option
@@ -39,11 +39,12 @@ module.exports = {
         .addChoices(...choices)
     ),
   async run({ client, interaction, user }) {
-    const money = interaction.options.getNumber('sotien');
+    const moneyInput = interaction.options.getNumber('sotien');
+    const money = moneyInput === 0 ? user.money : moneyInput;
     const n = interaction.options.getString('so');
     const guessNumber = n * 1;
 
-    if (money > user.money) {
+    if (money > user.money || user.money <= 0) {
       return await interaction.followUp('Bạn không đủ tiền');
     }
 
@@ -63,9 +64,9 @@ module.exports = {
       if (isWin) prize = money * 3;
     }
     await interaction.followUp(
-      `**${interaction.user.username}** đã cược **${formatMoney(
-        money
-      )}** để dự đoán số là **${
+      `**${interaction.user.username}** đã ${
+        moneyInput === 0 ? 'all in' : 'cược'
+      } **${formatMoney(money)}** để dự đoán số là **${
         guessNumber === 7 ? 'Chẵn' : guessNumber === 8 ? 'Lẻ' : guessNumber
       }**`
     );
