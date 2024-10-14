@@ -16,6 +16,8 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
+          script: |
+            echo "Connecting to server ${{ secrets.HOST }}"
       - name: Login to Docker Hub
         run: docker login -u pnviethung -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Pull Docker image
