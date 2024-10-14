@@ -1,17 +1,28 @@
 const { Schema, model } = require('mongoose');
-
-const userSchema = new Schema({
-  discordID: {
-    type: String,
-    required: true,
-    unique: true,
+const roles = require('../../constants/role.constants');
+const userSchema = new Schema(
+  {
+    discordID: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    role: {
+      type: String,
+      default: 'user',
+      enum: Object.values(roles),
+    },
+    money: {
+      type: Number,
+      default: 0,
+      min: 0,
+      set: (v) => Math.round(v),
+    },
   },
-  role: {
-    type: String,
-    default: 'user',
-    enum: ['user', 'admin'],
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 const User = model('User', userSchema);
 module.exports = User;

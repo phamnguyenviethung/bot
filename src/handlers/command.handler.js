@@ -30,7 +30,7 @@ module.exports = (client) => {
 
   const rest = new REST().setToken(botConfig.token);
   const clientId = botConfig.clientID;
-  client.once('ready', async () => {
+  client.on('ready', async () => {
     await rest.put(Routes.applicationCommands(clientId), {
       body: commandsArray,
     });
