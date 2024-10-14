@@ -10,14 +10,15 @@ jobs:
     environment: prod
     steps:
       - uses: actions/checkout@v4
+      - name: echo
+        run: echo "Connecting to server ${{ secrets.HOST }}"
       - uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: |
-            echo "Connecting to server ${{ secrets.HOST }}"
+
       - name: Login to Docker Hub
         run: docker login -u pnviethung -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Pull Docker image
