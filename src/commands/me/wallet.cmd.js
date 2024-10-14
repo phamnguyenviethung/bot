@@ -4,7 +4,7 @@ const formatMoney = require('../../utils/formatMoney');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('profile')
+    .setName('wallet')
     .setDescription('Thong tin ca nhan'),
   async run({ client, interaction, user }) {
     return await interaction.followUp(

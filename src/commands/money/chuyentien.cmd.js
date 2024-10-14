@@ -32,7 +32,7 @@ module.exports = {
     });
 
     if (!receiver) {
-      return await interaction.followUp('Người nhận không tồn tại');
+      return await interaction.followUp('Người nhận chưa đăng ký tài khoản');
     }
 
     if (interaction.user.id === r.id) {
