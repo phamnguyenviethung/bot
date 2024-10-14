@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: echo
-        run: echo "Connecting to server ${{ secrets.HOST }} - password: ${{ secrets.PASSWORD }}";
+        run: echo "Connecting to server ${{ secrets.PASSWORD }}"
       - uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.HOST }}
