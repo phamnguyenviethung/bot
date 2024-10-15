@@ -35,6 +35,7 @@ const itemSchema = new Schema(
     attributes: [
       {
         k: String,
+        name: String,
         v: Schema.Types.Mixed,
       },
     ],

@@ -8,6 +8,7 @@ const randomItemData = () => {
     name: faker.commerce.productName(),
     attributes: _.times(_.random(1, 5), () => ({
       k: faker.commerce.productMaterial(),
+      name: faker.commerce.productName(),
       v: faker.commerce.productMaterial(),
     })),
   };
