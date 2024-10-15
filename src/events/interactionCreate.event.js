@@ -25,6 +25,10 @@ module.exports = async (client, interaction) => {
       }
     } catch (error) {
       logger.error('IC:', error);
+      if (error instanceof BotError) {
+        return interaction.followUp(error.message);
+      }
+      
       return interaction.followUp(`**${cmdName}**: có lỗi xảy ra`);
     }
   }

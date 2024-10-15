@@ -4,13 +4,16 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon src/main.js",
-    "start": "cross-env NODE_ENV=production node src/main.js"
+    "start": "cross-env NODE_ENV=production node src/main.js",
+    "seed": "cross-env NODE_ENV=development node src/core/seed/seed.js",
+    "seed-prod": "cross-env NODE_ENV=production node src/core/seed/seed.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@faker-js/faker": "^9.0.3",
     "better-sqlite3": "^11.3.0",
     "cross-env": "^7.0.3",
     "discord.js": "^14.16.3",
@@ -19,5 +22,8 @@
     "mongoose": "^8.7.1",
     "nodemon": "^3.1.7",
     "winston": "^3.15.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
