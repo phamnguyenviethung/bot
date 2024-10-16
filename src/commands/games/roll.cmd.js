@@ -109,7 +109,7 @@ module.exports = {
 
       if (prize === 0) {
         return await interaction.followUp(
-          `💀\n\n**${interaction.user.username}** đã roll dính ô mất hết tiền\n\n`
+          `\n\n💀**${interaction.user.username}** đã roll dính ô mất hết tiền\n\n`
         );
       } else {
         await userRepo.plusMoney(interaction.user.id, prize);
