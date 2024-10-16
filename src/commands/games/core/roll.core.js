@@ -1,7 +1,7 @@
 const rollData = [
   {
     name: '🍇',
-    value: [1, 2],
+    value: [1, 1],
   },
   {
     name: '🤢',
@@ -9,15 +9,15 @@ const rollData = [
   },
   {
     name: '🎄',
-    value: [3, 6],
+    value: [3, 5],
   },
   {
     name: '🐀',
-    value: [4, 8],
+    value: [4, 6],
   },
   {
     name: '🪓',
-    value: [5, 15],
+    value: [5, 8],
   },
   {
     name: '🎱',

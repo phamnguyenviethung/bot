@@ -26,7 +26,6 @@ module.exports = {
             .setDescription('Số tiền cần cược - Nhập 0 để all in')
             .setMinValue(0)
             .setRequired(true)
-            .setMinValue(5000)
         )
     ),
   cooldown: 8,
@@ -39,12 +38,14 @@ module.exports = {
       return await interaction.followUp(prizeTableText);
     }
 
+    const MIN_BET_MONEY = 5000;
+
     const money =
       interaction.options.getNumber('money') === 0
         ? user.money
         : interaction.options.getNumber('money');
 
-    if (user.money <= 0 || user.money < money) {
+    if (money < MIN_BET_MONEY || money > user.money) {
       return interaction.followUp(
         `Số tiền cược tối thiểu là **${formatMoney(5000)}**.`
       );
