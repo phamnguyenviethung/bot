@@ -8,7 +8,7 @@ module.exports = {
     await interaction.followUp(
       `🏓Latency is ${
         Date.now() - interaction.createdTimestamp
-      }ms. API Latency is ${Math.round(client.ws.ping)}ms`
+      }ms. API Latency is ${Math.round(client.ws.ping)}ms :ca:`
     );
   },
 };

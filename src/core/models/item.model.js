@@ -37,6 +37,7 @@ const itemSchema = new Schema(
         k: String,
         name: String,
         v: Schema.Types.Mixed,
+        _id: false,
       },
     ],
     isActive: {

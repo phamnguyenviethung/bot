@@ -18,12 +18,14 @@ class CooldownService {
 
       if (now < expirationTime) {
         const timeLeft = (expirationTime - now) / 1000;
-
-        interaction.followUp(
-          `Vui lòng chờ để sử dụng. Bạn có thể quay lại sau **${timeLeft.toFixed(
-            0
-          )} giây**`
-        );
+        const replyText = `Vui lòng chờ để sử dụng. Bạn có thể quay lại sau **${timeLeft.toFixed(
+          0
+        )} giây**`;
+        if (!command.noDefer) {
+          interaction.followUp(replyText);
+        } else {
+          interaction.reply(replyText);
+        }
 
         return false;
       }
