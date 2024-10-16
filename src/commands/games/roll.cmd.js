@@ -38,7 +38,7 @@ module.exports = {
       return await interaction.followUp(prizeTableText);
     }
 
-    const MIN_BET_MONEY = 5000;
+    const MIN_BET_MONEY = 3000;
 
     const money =
       interaction.options.getNumber('money') === 0
