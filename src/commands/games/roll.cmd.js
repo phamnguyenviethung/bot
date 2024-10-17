@@ -47,7 +47,7 @@ module.exports = {
 
     if (money < MIN_BET_MONEY || money > user.money) {
       return interaction.followUp(
-        `Số tiền cược tối thiểu là **${formatMoney(5000)}**.`
+        `Số tiền cược tối thiểu là **${formatMoney(MIN_BET_MONEY)}**.`
       );
     }
 

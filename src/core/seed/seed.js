@@ -5,6 +5,8 @@ const db = require('../../configs/db.config');
 const { logger } = require('../../configs/logger.config');
 const itemSeed = require('./item/item.seed');
 const invenService = require('../services/inventory.service');
+const itemService = require('../services/item.service');
+const { dig } = require('../../commands/work/core/dig.core');
 
 const test = async () => {
   try {
@@ -18,6 +20,7 @@ const run = async () => {
     await db.connect();
 
     logger.info('===== Seed Start =====');
+
     logger.info('===== Seed end =====');
   } catch (error) {
     logger.error('!!==== Seed error ====!!');
@@ -25,5 +28,5 @@ const run = async () => {
   }
 };
 
-// run();
+run();
 // test();

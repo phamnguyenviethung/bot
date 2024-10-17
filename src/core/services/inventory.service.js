@@ -28,6 +28,17 @@ class InventoryService {
     );
   };
 
+  isInInventory = async ({ userID, itemCode }) => {
+    const item = await itemRepo.getByCode(itemCode);
+
+    const inven = await Inventory.findOne({
+      user: userID,
+      'items.item': item._id,
+    });
+
+    return !!inven;
+  };
+
   updateItemQuantity = async ({ quantity, userID, itemCode }) => {
     const item = await itemRepo.getByCode(itemCode);
 
@@ -46,7 +57,6 @@ class InventoryService {
         },
       },
       {
-        upsert: true,
         new: true,
       }
     );
@@ -55,6 +65,8 @@ class InventoryService {
   };
 
   addInventory = async ({ userID, itemCode, quantity }) => {
+    console.log('Add item: ', itemCode);
+
     const inven = await Inventory.findOne({ user: userID });
     if (!inven) {
       return await this.createInventory({ userID, itemCode, quantity });
@@ -71,7 +83,7 @@ class InventoryService {
         throw new BotError('Bạn không đủ số lượng');
       }
     }
-    console.log('hi');
+
     if (inven.items.length === 0) {
       const item = await itemRepo.getByCode(itemCode);
       inven.items = [
@@ -84,7 +96,30 @@ class InventoryService {
       return await inven.save();
     }
 
-    return await this.updateItemQuantity({ userID, itemCode, quantity });
+    const isInInven = await this.isInInventory({ userID, itemCode });
+
+    if (!isInInven) {
+      const item = await itemRepo.getByCode(itemCode);
+
+      await Inventory.findOneAndUpdate(
+        {
+          user: userID,
+        },
+        {
+          $push: {
+            items: {
+              item: item._id,
+              quantity,
+            },
+          },
+        },
+        {
+          upsert: true,
+        }
+      );
+    } else {
+      return await this.updateItemQuantity({ userID, itemCode, quantity });
+    }
   };
 
   clearEmpptyItems = async (userID) => {
@@ -123,8 +158,6 @@ class InventoryService {
     if (!itemInInven) {
       return false;
     }
-
-    console.log(itemInInven, quantity);
 
     return itemInInven.quantity >= quantity;
   };

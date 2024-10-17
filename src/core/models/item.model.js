@@ -32,6 +32,10 @@ const itemSchema = new Schema(
       min: 0,
       default: 0,
     },
+    tags: {
+      type: [String],
+      default: [],
+    },
     attributes: [
       {
         k: String,
