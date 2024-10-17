@@ -1,5 +1,10 @@
-const { Schema, model } = require('mongoose');
-const { ItemTypes } = require('../../constants/item.constants');
+import { Schema, model } from 'mongoose';
+const ItemTypes = {
+  WEAPON: 'vũ khí',
+  TOOL: 'công cụ',
+  MATERIAL: 've chai',
+  OTHER: 'khác',
+};
 
 const itemSchema = new Schema(
   {
@@ -53,6 +58,5 @@ const itemSchema = new Schema(
     timestamps: true,
   }
 );
-
 const Item = model('Item', itemSchema);
-module.exports = Item;
+export default Item;

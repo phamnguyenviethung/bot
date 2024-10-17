@@ -1,5 +1,8 @@
-const { Schema, model } = require('mongoose');
-const roles = require('../../constants/role.constants');
+import { Schema, model } from 'mongoose';
+const roles = {
+  USER: 'user',
+  ADMIN: 'admin',
+};
 const userSchema = new Schema(
   {
     discordID: {
@@ -23,6 +26,5 @@ const userSchema = new Schema(
     timestamps: true,
   }
 );
-
 const User = model('User', userSchema);
-module.exports = User;
+export default User;
