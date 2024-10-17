@@ -65,8 +65,6 @@ class InventoryService {
   };
 
   addInventory = async ({ userID, itemCode, quantity }) => {
-    console.log('Add item: ', itemCode);
-
     const inven = await Inventory.findOne({ user: userID });
     if (!inven) {
       return await this.createInventory({ userID, itemCode, quantity });
