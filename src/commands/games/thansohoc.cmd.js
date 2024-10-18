@@ -50,7 +50,7 @@ module.exports = {
 
     await userRepo.plusMoney(user.discordID, -money);
 
-    const randomNumber = _.random(1, 6);
+    const randomNumber = _.random(1, 4);
     const isOdd = randomNumber % 2 !== 0;
 
     let isWin = false;
@@ -58,10 +58,10 @@ module.exports = {
 
     if (n > 6) {
       isWin = (isOdd && guessNumber === 8) || (!isOdd && guessNumber === 7);
-      if (isWin) prize = money * 2;
+      if (isWin) prize = money * 3;
     } else {
       isWin = guessNumber === randomNumber;
-      if (isWin) prize = money * 3;
+      if (isWin) prize = money * 6;
     }
     await interaction.followUp(
       `**${interaction.user.username}** đã ${
