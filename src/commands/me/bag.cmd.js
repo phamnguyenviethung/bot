@@ -25,17 +25,17 @@ const generateBagText = ({ data, itemType }) => {
 
 module.exports = {
   data: new SlashCommandBuilder().setName('bag').setDescription('Kho đồ'),
+  cooldown: 3,
   async run({ client, interaction, user }) {
     const inven = await inventoryService.getInvenByUserID(user._id);
 
     if (!inven) {
-      return await interaction.reply(`Bị gì rồi sir, hãy bão Hack`);
+      return await interaction.followUp(`Bị gì rồi sir, hãy bão Hack`);
     }
 
     let currentPage = 1;
 
     const generateText = () => {
-      console.log(currentPage);
       const currentBagData = inven[currentPage - 1];
       let text = generateBagText({
         itemType: currentBagData.itemType,
