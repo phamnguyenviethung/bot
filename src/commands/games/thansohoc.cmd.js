@@ -13,7 +13,7 @@ const choices = [
   },
 ];
 
-[1, 2, 3, 4, 5, 6].forEach((i) => {
+[1, 2, 3, 4].forEach((i) => {
   choices.push({
     name: `${i}`,
     value: String(i),
