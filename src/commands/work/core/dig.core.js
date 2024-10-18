@@ -2,14 +2,18 @@ const { random } = require('chance-percent');
 const { Rarity } = require('../../../constants/item.constants');
 const _ = require('lodash');
 const itemService = require('../../../core/services/item.service');
-const randomRarity = () => {
+const randomRarity = async () => {
+  const r = await itemService.getAvailableDigItemRarirty();
+
   const options = [
     { value: Rarity.COMMON, percentage: 75 },
     { value: Rarity.RARE, percentage: 24 },
     { value: Rarity.EPIC, percentage: 1 },
   ];
 
-  return random(options);
+  const filterOpt = options.filter((opt) => r.includes(opt.value));
+
+  return random(filterOpt);
 };
 
 const randomQuantity = (rarity) => {
@@ -28,7 +32,8 @@ const randomQuantity = (rarity) => {
 };
 
 const dig = async () => {
-  const rarity = randomRarity();
+  const rarity = await randomRarity();
+
   const q = randomQuantity(rarity);
   const item = await itemService.getDigItem({ rarity });
 

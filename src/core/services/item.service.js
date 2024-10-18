@@ -5,6 +5,22 @@ class ItemService {
     return await Item.create(data);
   };
 
+  getAvailableDigItemRarirty = async (filter = {}) => {
+    const items = await Item.find({
+      tags: {
+        $in: ['dig'],
+      },
+      'attributes.k': 'rare',
+      ...filter,
+    }).select('attributes');
+
+    const rarities = items.map((r) => {
+      return r.attributes.find((a) => a.k === 'rare').v;
+    });
+
+    return _.uniq(rarities);
+  };
+
   getDigItem = async ({ rarity }) => {
     const listItems = await this.getAllDigItems({
       attributes: {
