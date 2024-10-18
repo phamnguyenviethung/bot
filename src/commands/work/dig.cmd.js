@@ -5,7 +5,7 @@ const formatMoney = require('../../utils/formatMoney');
 const { dig } = require('./core/dig.core');
 const inventoryService = require('../../core/services/inventory.service');
 module.exports = {
-  cooldown: 1,
+  cooldown: 30,
   data: new SlashCommandBuilder()
     .setName('dig')
     .setDescription('Dao mo kiem tien'),

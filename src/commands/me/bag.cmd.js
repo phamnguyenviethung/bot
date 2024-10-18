@@ -17,7 +17,7 @@ const generateBagText = ({ data, itemType }) => {
   let result = `\n==========\n**${itemType.toUpperCase()}**:\n==========\n`;
 
   data.forEach((item) => {
-    result += `- **${item.name}**: ${item.quantity}\n`;
+    result += `- **${item.name}**: ${item.quantity} \`${item.code}\`\n`;
   });
 
   return result;
@@ -57,7 +57,7 @@ module.exports = {
     const nextButton = new ButtonBuilder()
       .setCustomId(buttonID.next)
       .setLabel('Tiếp')
-      .setStyle(ButtonStyle.Primary)
+      .setStyle(ButtonStyle.Success)
       .setDisabled(inven.length === 1 || currentPage === inven.length);
 
     const row = new ActionRowBuilder().addComponents(prevButton, nextButton);
