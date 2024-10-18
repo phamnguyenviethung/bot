@@ -4,11 +4,11 @@ const rollData = [
     value: [0, 0],
   },
   {
-    name: '🤶🏼',
+    name: '🕸️',
     value: [1, 1],
   },
   {
-    name: '🫂',
+    name: '⛄',
     value: [2, 4],
   },
   {
