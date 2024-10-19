@@ -37,7 +37,7 @@ module.exports = {
         .setName('amount')
         .setDescription('Số tiền cược')
         .setRequired(true)
-        .setMinValue(1000)
+        .setMinValue(5000)
     )
     .addNumberOption((option) =>
       option
@@ -65,11 +65,20 @@ module.exports = {
     const row = new ActionRowBuilder().addComponents(headButton, tailButton);
 
     const playerList = [];
+
     const generateContent = () => {
+      const { totalPlayer, totalBet } = calcBetData({
+        playerList,
+        amount,
+        choice: randomChoice,
+      });
+
       return `💶 ** ${
         interaction.user.username
       }**  đã mở sòng coinflip với giá ${formatMoney(
         amount
+      )}\n\nTổng người chơi: ${totalPlayer}\nTổng tiền bet: ${formatMoney(
+        totalBet
       )}\n\n${generateChoiceText(playerList)}`;
     };
     const reply = await interaction.followUp({
@@ -125,12 +134,6 @@ module.exports = {
           choice: i.customId,
         });
 
-        const betdata = calcBetData({
-          playerList,
-          amount,
-          choice: randomChoice,
-        });
-
         return await reply.edit({
           content: generateContent(),
           components: [row],
@@ -153,12 +156,14 @@ module.exports = {
       });
 
       if (totalPlayer <= 1) {
+        await userRepo.plusMoney(user.id, amount);
         return interaction.followUp({
           content: 'Không đủ người chơi. Bạn sẽ được hoàn trả tiền',
         });
       }
 
       if (winnerList.length === 0 || lostList.length === 0) {
+        await userRepo.plusMoney(user.id, amount);
         return interaction.followUp({
           content: 'Không có người thắng hoặc thua. Bạn sẽ được hoàn trả tiền',
         });
@@ -172,7 +177,7 @@ module.exports = {
 
       return interaction.followUp({
         content: `Kết quả: **${randomChoice}**. Người chiến thằng sẽ nhận được ${formatMoney(
-          prize
+          prize - amount
         )}`,
       });
     });
