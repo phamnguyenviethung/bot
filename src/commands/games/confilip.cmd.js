@@ -171,7 +171,7 @@ module.exports = {
       );
 
       return interaction.followUp({
-        content: `Kết quả: ${randomChoice}. Số tiền cược: ${formatMoney(
+        content: `Kết quả: **${randomChoice}**. Người chiến thằng sẽ nhận được ${formatMoney(
           prize
         )}`,
       });
