@@ -165,7 +165,9 @@ module.exports = {
       if (winnerList.length === 0 || lostList.length === 0) {
         let list = winnerList.length === 0 ? lostList : winnerList;
 
-        await Promise.all(list.map((p) => userRepo.plusMoney(p.userID, prize)));
+        await Promise.all(
+          list.map((p) => userRepo.plusMoney(p.userID, amount * totalPlayer))
+        );
 
         return interaction.followUp({
           content: 'Không có người thắng hoặc thua. Bạn sẽ được hoàn trả tiền',

@@ -58,10 +58,10 @@ module.exports = {
 
     if (n > 6) {
       isWin = (isOdd && guessNumber === 8) || (!isOdd && guessNumber === 7);
-      if (isWin) prize = money * 3;
+      if (isWin) prize = money * 2;
     } else {
       isWin = guessNumber === randomNumber;
-      if (isWin) prize = money * 6;
+      if (isWin) prize = money * 4;
     }
     await interaction.followUp(
       `**${interaction.user.username}** đã ${
