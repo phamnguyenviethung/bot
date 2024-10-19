@@ -99,7 +99,7 @@ module.exports = {
         const isIn = playerList.some((p) => p.userID === i.user.id);
 
         if (isIn) {
-          return interaction.followUp({
+          return i.followUp({
             content: 'Bạn đã cược rồi',
             ephemeral: true,
           });
@@ -107,14 +107,14 @@ module.exports = {
 
         const player = await User.findOne({ discordID: i.user.id });
         if (!player) {
-          return interaction.followUp({
+          return i.followUp({
             content: 'Bạn chưa đăng ký tài khoản',
             ephemeral: true,
           });
         }
 
         if (player.money < amount) {
-          return interaction.followUp({
+          return i.followUp({
             content: 'Bạn không đủ tiền để cược',
             ephemeral: true,
           });
