@@ -77,7 +77,7 @@ module.exports = {
         interaction.user.username
       }**  đã mở sòng coinflip với giá ${formatMoney(
         amount
-      )}\n\nTổng người chơi: ${totalPlayer}\nTổng tiền bet: ${formatMoney(
+      )}\n\nTổng người chơi: **${totalPlayer}**\nTổng tiền bet: ${formatMoney(
         totalBet
       )}\n\n${generateChoiceText(playerList)}`;
     };
@@ -156,14 +156,17 @@ module.exports = {
       });
 
       if (totalPlayer <= 1) {
-        await userRepo.plusMoney(user.id, amount);
+        await userRepo.plusMoney(user.discordID, amount * totalPlayer);
         return interaction.followUp({
           content: 'Không đủ người chơi. Bạn sẽ được hoàn trả tiền',
         });
       }
 
       if (winnerList.length === 0 || lostList.length === 0) {
-        await userRepo.plusMoney(user.id, amount);
+        let list = winnerList.length === 0 ? lostList : winnerList;
+
+        await Promise.all(list.map((p) => userRepo.plusMoney(p.userID, prize)));
+
         return interaction.followUp({
           content: 'Không có người thắng hoặc thua. Bạn sẽ được hoàn trả tiền',
         });
