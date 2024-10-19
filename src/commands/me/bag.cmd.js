@@ -80,12 +80,8 @@ module.exports = {
         await i.deferUpdate();
 
         if (i.customId === buttonID.prev) {
-          console.log('prev');
-
           currentPage -= 1;
         } else {
-          console.log('next');
-
           currentPage += 1;
         }
 
