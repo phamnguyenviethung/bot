@@ -58,7 +58,7 @@ module.exports = {
 
     if (n > 6) {
       isWin = (isOdd && guessNumber === 8) || (!isOdd && guessNumber === 7);
-      if (isWin) prize = money * 2;
+      if (isWin) prize = money * 3;
     } else {
       isWin = guessNumber === randomNumber;
       if (isWin) prize = money * 4;
