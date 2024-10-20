@@ -8,8 +8,8 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('work')
     .setDescription('lam viec kiem tien'),
-  async run({ client, interaction }) {
-    const randomMoney = _.random(1000, 4000);
+  async run({ client, interaction, economicRate }) {
+    const randomMoney = _.random(10000, 500000) * economicRate.main;
 
     await userRepo.plusMoney(interaction.user.id, randomMoney);
 
