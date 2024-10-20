@@ -5,17 +5,25 @@ const formatMoney = require('../../utils/formatMoney');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('chuyentien')
-    .setDescription('Chuyển tiền cho người khác')
-    .addUserOption((option) =>
-      option.setName('nguoinhan').setDescription('Người nhận').setRequired(true)
-    )
-    .addNumberOption((option) =>
-      option
-        .setName('sotien')
-        .setDescription('Số tiền cần chuyển')
-        .setRequired(true)
-        .setMinValue(1)
+    .setName('bank')
+    .setDescription('Lệnh liên quán đến ngân hàng')
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName('chuyentien')
+        .setDescription('Chuyển tiền cho người khác')
+        .addUserOption((option) =>
+          option
+            .setName('nguoinhan')
+            .setDescription('Người nhận')
+            .setRequired(true)
+        )
+        .addNumberOption((option) =>
+          option
+            .setName('sotien')
+            .setDescription('Số tiền cần chuyển')
+            .setRequired(true)
+            .setMinValue(1)
+        )
     ),
   async run({ client, interaction, user }) {
     const r = interaction.options.getUser('nguoinhan');
@@ -43,6 +51,14 @@ module.exports = {
 
     await userRepo.plusMoney(user.discordID, -amount);
     await userRepo.plusMoney(receiver.discordID, amount);
+
+    client.users.fetch(r.id).then((u) => {
+      u.send(
+        `💳  Bạn vừa nhận được ${formatMoney(amount)} tiền từ **${
+          interaction.user.username
+        }**`
+      );
+    });
 
     await interaction.followUp(
       `💸 **${interaction.user.username}** đã chuyển ${formatMoney(
