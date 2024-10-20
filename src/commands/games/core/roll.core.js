@@ -1,31 +1,31 @@
 const rollData = [
   {
-    name: '🥶',
+    name: '🎅🏼',
     value: [0, 0],
   },
   {
-    name: '🕸️',
+    name: '🎄',
     value: [1, 1],
   },
   {
-    name: '⛄',
+    name: '🏂🏼',
     value: [2, 4],
   },
   {
-    name: '🇺🇲',
+    name: '❄️',
     value: [3, 5],
   },
   {
-    name: '🤶🏼',
+    name: '🦌',
     value: [4, 6],
   },
   {
-    name: '🧃',
+    name: '🔔',
     value: [5, 8],
   },
   {
-    name: '🎱',
-    value: [0, 20],
+    name: '🎁',
+    value: [0, 15],
   },
 ];
 function copyNText(content, n = 1) {
