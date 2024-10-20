@@ -4,12 +4,15 @@ const userRepo = require('../../core/repositories/user.repo');
 const _ = require('lodash');
 const formatMoney = require('../../utils/formatMoney');
 module.exports = {
-  cooldown: 25,
+  cooldown: 20,
   data: new SlashCommandBuilder()
     .setName('work')
     .setDescription('lam viec kiem tien'),
   async run({ client, interaction, economicRate }) {
-    const randomMoney = _.random(10000, 500000) * economicRate.main;
+    const randomMoney = _.random(
+      10000 * economicRate.main,
+      500000 * (economicRate.main + 2)
+    );
 
     await userRepo.plusMoney(interaction.user.id, randomMoney);
 

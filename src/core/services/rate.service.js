@@ -30,7 +30,7 @@ class RateService {
     } else if (totalMoney > 1 * 1000000000) {
       return rateConstant.HIGH;
     } else {
-      return totalCoin >= 10 * 1000 ? rateConstant.MEDIUM : rateConstant.LOW;
+      return totalCoin >= 100000000 ? rateConstant.MEDIUM : rateConstant.LOW;
     }
   };
 
@@ -42,7 +42,7 @@ class RateService {
       coinBuyPrice = _.random(500000, 2000000) * (mainRate + 1);
     }
 
-    const PERCENT = _.random(30, 60) / 100;
+    const PERCENT = _.random(45, 90) / 100;
 
     return {
       coinBuyPrice,
@@ -82,7 +82,7 @@ class RateService {
   setCacheRate = async () => {
     const rate = await this.getEconomicRate();
 
-    const minutes = _.random(8, 20) * 60 * 1000;
+    const minutes = _.random(8, 15) * 60 * 1000;
     const data = {
       ...rate,
       minutes,
