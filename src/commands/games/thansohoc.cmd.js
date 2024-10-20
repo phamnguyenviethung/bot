@@ -67,7 +67,7 @@ module.exports = {
     if (n > 6) {
       isWin = (isOdd && guessNumber === 8) || (!isOdd && guessNumber === 7);
       if (isWin) {
-        prize = coin * 2;
+        prize = coin * 3;
 
         user.latestWinPrize = prize - coin;
         await user.save();
