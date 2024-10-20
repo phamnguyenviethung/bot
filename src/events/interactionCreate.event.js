@@ -38,6 +38,9 @@ module.exports = async (client, interaction) => {
 
       if (isValidCooldown) {
         const economicRate = await rateService.getCacheRate();
+
+        logger.info(JSON.stringify(economicRate));
+
         await command.run({ client, interaction, user, economicRate });
       }
     } catch (error) {

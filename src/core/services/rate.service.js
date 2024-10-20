@@ -34,6 +34,22 @@ class RateService {
     }
   };
 
+  calcCoinPrice = async (mainRate) => {
+    let coinBuyPrice = _.random(2000000, 5000000) * (mainRate + 2);
+    if ([rateConstant.LOW, rateConstant.MEDIUM].includes(mainRate)) {
+      coinBuyPrice = _.random(20000, 40000) * (mainRate - 1);
+    } else if (rateConstant.HIGH === mainRate) {
+      coinBuyPrice = _.random(500000, 2000000) * (mainRate + 1);
+    }
+
+    const PERCENT = _.random(30, 60) / 100;
+
+    return {
+      coinBuyPrice,
+      coinSellPrice: _.round(coinBuyPrice * PERCENT),
+    };
+  };
+
   checkCanSellCoin = async (mainRate) => {
     const { totalCoin, totalMoney } = await this.getTotalMoneyAndCoin();
 
@@ -55,17 +71,18 @@ class RateService {
   getEconomicRate = async () => {
     const main = await this.calcMainRate();
     const canSellCoin = await this.checkCanSellCoin(main);
-
+    const coinRate = await this.calcCoinPrice(main);
     return {
       main,
       canSellCoin,
+      ...coinRate,
     };
   };
 
   setCacheRate = async () => {
     const rate = await this.getEconomicRate();
 
-    const minutes = _.random(8, 20);
+    const minutes = _.random(8, 20) * 60 * 1000;
     const data = {
       ...rate,
       minutes,
@@ -77,7 +94,6 @@ class RateService {
 
   getCacheRate = async () => {
     const cache = await keyV.get(KEY);
-
     if (!cache) {
       return await this.setCacheRate();
     }
