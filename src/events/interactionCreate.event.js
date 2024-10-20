@@ -2,6 +2,7 @@ const User = require('../core/models/user.model');
 const { checkCooldown } = require('../core/services/cooldown.service');
 const { logger } = require('../configs/logger.config');
 const BotError = require('../utils/BotError');
+const statusService = require('../core/services/status.service');
 
 const whiteList = ['dangky'];
 
@@ -26,6 +27,8 @@ module.exports = async (client, interaction) => {
 
       if (!command.noDefer) await interaction.deferReply();
 
+      await statusService.checkTimeJail(interaction.user.id);
+
       const isValidCooldown = await checkCooldown({
         client,
         command,
@@ -36,10 +39,10 @@ module.exports = async (client, interaction) => {
         await command.run({ client, interaction, user });
       }
     } catch (error) {
-      logger.error('IC:', error);
       if (error instanceof BotError) {
         return interaction.followUp(error.message);
       }
+      logger.error('IC:', error);
 
       return interaction.followUp(`**${cmdName}**: có lỗi xảy ra`);
     }
