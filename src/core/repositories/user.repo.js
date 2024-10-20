@@ -9,6 +9,15 @@ class UserRepository {
     user.money += amount;
     return await user.save();
   };
+
+  plusCoin = async (discordID, amount) => {
+    const user = await User.findOne({
+      discordID,
+    });
+
+    user.coin += amount;
+    return await user.save();
+  };
 }
 
 module.exports = new UserRepository();

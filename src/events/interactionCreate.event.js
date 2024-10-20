@@ -3,6 +3,7 @@ const { checkCooldown } = require('../core/services/cooldown.service');
 const { logger } = require('../configs/logger.config');
 const BotError = require('../utils/BotError');
 const statusService = require('../core/services/status.service');
+const rateService = require('../core/services/rate.service');
 
 const whiteList = ['dangky'];
 
@@ -36,7 +37,8 @@ module.exports = async (client, interaction) => {
       });
 
       if (isValidCooldown) {
-        await command.run({ client, interaction, user });
+        const economicRate = await rateService.getCacheRate();
+        await command.run({ client, interaction, user, economicRate });
       }
     } catch (error) {
       if (error instanceof BotError) {

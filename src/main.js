@@ -10,7 +10,6 @@ const {
 const generateKeyv = require('./configs/keyv.config');
 const botConfig = require('./configs/bot.config');
 const db = require('./configs/db.config');
-const vietnamTime = require('./utils/time');
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,

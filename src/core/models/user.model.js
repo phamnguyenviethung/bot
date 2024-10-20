@@ -18,6 +18,12 @@ const userSchema = new Schema(
       min: 0,
       set: (v) => Math.round(v),
     },
+    coin: {
+      type: Number,
+      default: 0,
+      min: 0,
+      set: (v) => Math.round(v),
+    },
   },
   {
     timestamps: true,
