@@ -75,7 +75,7 @@ module.exports = {
     } else {
       isWin = guessNumber === randomNumber;
       if (isWin) {
-        prize = coin * 4;
+        prize = coin * 8;
 
         user.latestWinPrize = prize - coin;
         await user.save();
