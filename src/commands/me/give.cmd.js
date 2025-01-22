@@ -1,15 +1,11 @@
 const { SlashCommandBuilder } = require('discord.js');
-const User = require('../../core/models/user.model');
-const formatMoney = require('../../utils/formatMoney');
-const itemRepo = require('../../core/repositories/item.repo');
-const inventoryService = require('../../core/services/inventory.service');
 const { giveToOtherUser } = require('./core/give.core');
 const BotError = require('../../utils/BotError');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('give')
-    .setDescription('Thong tin ca nhan')
+    .setDescription('Đưa đồ cho người khác')
     .addUserOption((option) =>
       option.setName('user').setDescription('Người nhận').setRequired(true)
     )

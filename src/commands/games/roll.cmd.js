@@ -11,7 +11,7 @@ const formatMoney = require('../../utils/formatMoney');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('roll')
+    .setName('games')
     .setDescription('Roll game Slot 777')
     .addSubcommand((subcommand) =>
       subcommand.setName('huongdan').setDescription('Xem huong dan')
