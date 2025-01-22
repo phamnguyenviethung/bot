@@ -54,7 +54,7 @@ importers:
         specifier: 1.1.0-rc-3
         version: 1.1.0-rc-3
       mongoose:
-        specifier: ^8.7.1
+        specifier: ^8.9.5
         version: 8.9.5
       mongoose-autopopulate:
         specifier: ^1.1.0
