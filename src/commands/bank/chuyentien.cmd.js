@@ -2,7 +2,6 @@ const { SlashCommandBuilder } = require('discord.js');
 const User = require('../../core/models/user.model');
 const userRepo = require('../../core/repositories/user.repo');
 const formatMoney = require('../../utils/formatMoney');
-const formatCoin = require('../../utils/formatCoin');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -12,22 +11,6 @@ module.exports = {
       subcommand
         .setName('chuyentien')
         .setDescription('Chuyển tiền cho người khác')
-        .addStringOption((option) =>
-          option
-            .setName('loaitien')
-            .setDescription('Loại tiền')
-            .setRequired(true)
-            .addChoices([
-              {
-                name: 'Tiền',
-                value: 'money',
-              },
-              {
-                name: 'Coin',
-                value: 'coin',
-              },
-            ])
-        )
         .addUserOption((option) =>
           option
             .setName('nguoinhan')
@@ -44,10 +27,9 @@ module.exports = {
     ),
   async run({ client, interaction, user }) {
     const r = interaction.options.getUser('nguoinhan');
-    const type = interaction.options.getString('loaitien');
     const amount = interaction.options.getNumber('sotien');
 
-    const userBalnaceType = type === 'money' ? user.money : user.coin;
+    const userBalnaceType = user.money;
 
     if (amount > userBalnaceType) {
       return await interaction.followUp(
@@ -69,40 +51,21 @@ module.exports = {
       );
     }
 
-    if (type === 'money') {
-      await userRepo.plusMoney(user.discordID, -amount);
-      await userRepo.plusMoney(receiver.discordID, amount);
+    await userRepo.plusMoney(user.discordID, -amount);
+    await userRepo.plusMoney(receiver.discordID, amount);
 
-      client.users.fetch(r.id).then((u) => {
-        u.send(
-          `💳  Bạn vừa nhận được ${formatMoney(amount)} tiền từ **${
-            interaction.user.username
-          }**`
-        );
-      });
-
-      await interaction.followUp(
-        `💸 **${interaction.user.username}** đã chuyển ${formatMoney(
-          amount
-        )} tiền cho **${r.username}**`
+    client.users.fetch(r.id).then((u) => {
+      u.send(
+        `💳  Bạn vừa nhận được ${formatMoney(amount)} tiền từ **${
+          interaction.user.username
+        }**`
       );
-    } else {
-      await userRepo.plusCoin(user.discordID, -amount);
-      await userRepo.plusCoin(receiver.discordID, amount);
+    });
 
-      client.users.fetch(r.id).then((u) => {
-        u.send(
-          `💳  Bạn vừa nhận được ${formatCoin(amount)} từ **${
-            interaction.user.username
-          }**`
-        );
-      });
-
-      await interaction.followUp(
-        `💸 **${interaction.user.username}** đã chuyển ${formatCoin(
-          amount
-        )} cho **${r.username}**`
-      );
-    }
+    await interaction.followUp(
+      `💸 **${interaction.user.username}** đã chuyển ${formatMoney(
+        amount
+      )} tiền cho **${r.username}**`
+    );
   },
 };

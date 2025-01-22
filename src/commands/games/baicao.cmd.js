@@ -60,7 +60,7 @@ module.exports = {
     await interaction.editReply({
       files: [attachment],
     });
-    const prize = money * 2;
+    const prize = money * 3;
 
     if (isWin) {
       await userRepo.plusMoney(interaction.user.id, prize);
