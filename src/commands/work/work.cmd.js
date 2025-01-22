@@ -13,7 +13,7 @@ module.exports = {
     await userRepo.plusMoney(interaction.user.id, randomMoney);
 
     return await interaction.followUp(
-      `🤝 **${interaction.user.username}** vừa được Tgau lì xì${formatMoney(
+      `🤝 **${interaction.user.username}** vừa được Tgau lì xì ${formatMoney(
         randomMoney
       )}`
     );
