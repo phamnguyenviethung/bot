@@ -12,7 +12,6 @@ module.exports = {
     ),
   async run({ client, interaction }) {
     const a = await craftService.getAllRecipes();
-    console.log(a);
     await interaction.followUp(
       `🏓Latency is ${
         Date.now() - interaction.createdTimestamp

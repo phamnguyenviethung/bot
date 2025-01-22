@@ -1,5 +1,3 @@
-class LocationService {
-
-}
+class LocationService {}
 
 module.exports = new LocationService();
