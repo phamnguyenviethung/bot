@@ -13,17 +13,11 @@ const choices = [
   },
 ];
 
-[1, 2, 3, 4].forEach((i) => {
-  choices.push({
-    name: `${i}`,
-    value: String(i),
-  });
-});
 module.exports = {
   cooldown: 5,
   data: new SlashCommandBuilder()
-    .setName('thansohoc')
-    .setDescription('Thần số học')
+    .setName('chanle')
+    .setDescription('Chẵn lẻ')
     .addNumberOption((option) =>
       option
         .setName('money')
@@ -34,7 +28,7 @@ module.exports = {
     .addStringOption((option) =>
       option
         .setName('so')
-        .setDescription('Chọn chẵn/lẻ hoặc dự đoán số')
+        .setDescription('Chọn chẵn/lẻ')
         .setRequired(true)
         .addChoices(...choices)
     ),
@@ -61,31 +55,19 @@ module.exports = {
     const randomNumber = _.random(1, 4);
     const isOdd = randomNumber % 2 !== 0;
 
-    let isWin = false;
-    let prize = 0;
+    let isWin = (isOdd && guessNumber === 8) || (!isOdd && guessNumber === 7);
+    let prize = money * 2;
 
-    if (n > 6) {
-      isWin = (isOdd && guessNumber === 8) || (!isOdd && guessNumber === 7);
-      if (isWin) {
-        prize = money * 3;
-
-        user.latestWinPrize = prize - money;
-        await user.save();
-      }
-    } else {
-      isWin = guessNumber === randomNumber;
-      if (isWin) {
-        prize = money * 8;
-
-        user.latestWinPrize = prize - money;
-        await user.save();
-      }
+    if (isWin) {
+      user.latestWinPrize = prize - money;
+      await user.save();
     }
+
     await interaction.followUp(
       `**${interaction.user.username}** đã ${
         moneyInput === 0 ? 'all in' : 'cược'
       } ${formatMoney(money)} để dự đoán số là **${
-        guessNumber === 7 ? 'Chẵn' : guessNumber === 8 ? 'Lẻ' : guessNumber
+        guessNumber === 7 ? 'Chẵn' : 'lẻ'
       }**`
     );
     await new Promise((resolve) => {
