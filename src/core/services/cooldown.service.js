@@ -1,8 +1,13 @@
 const { Collection } = require('discord.js');
 const commandConfig = require('../../configs/command.config');
+const botConfig = require('../../configs/bot.config');
 
 class CooldownService {
   checkCooldown({ client, command, interaction }) {
+    if (botConfig.env === 'development') {
+      return true;
+    }
+
     if (!client.cooldowns.has(command.data.name)) {
       client.cooldowns.set(command.data.name, new Collection());
     }

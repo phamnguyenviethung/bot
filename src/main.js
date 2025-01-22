@@ -7,7 +7,6 @@ const {
   Partials,
   Collection,
 } = require('discord.js');
-const generateKeyv = require('./configs/keyv.config');
 const botConfig = require('./configs/bot.config');
 const db = require('./configs/db.config');
 const client = new Client({

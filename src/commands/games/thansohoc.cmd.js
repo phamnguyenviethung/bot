@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const _ = require('lodash');
 const userRepo = require('../../core/repositories/user.repo');
-const formatCoin = require('../../utils/formatCoin');
+const formatMoney = require('../../utils/formatMoney');
 const choices = [
   {
     name: 'Chẵn',
@@ -26,7 +26,7 @@ module.exports = {
     .setDescription('Thần số học')
     .addNumberOption((option) =>
       option
-        .setName('socoin')
+        .setName('money')
         .setDescription('Nhập số tiền cược')
         .setRequired(true)
         .setMinValue(0)
@@ -39,24 +39,24 @@ module.exports = {
         .addChoices(...choices)
     ),
   async run({ client, interaction, user }) {
-    const coinInput = interaction.options.getNumber('socoin');
-    const coin = coinInput === 0 ? user.coin : coinInput;
+    const moneyInput = interaction.options.getNumber('money');
+    const money = moneyInput === 0 ? user.money : moneyInput;
     const n = interaction.options.getString('so');
     const guessNumber = n * 1;
 
-    if (coin > user.coin || user.coin <= 0) {
+    if (money > user.money || user.money <= 0) {
       return await interaction.followUp('Bạn không đủ tiền');
     }
 
     const latestWinPrize = _.round(user.latestWinPrize / 2);
-    if (coin < latestWinPrize && user.latestWinPrize > 0) {
+    if (money < latestWinPrize && user.latestWinPrize > 0) {
       return await interaction.followUp(
-        `Theo luật, bạn cần ít nhất cược vào  ${formatCoin(
+        `Theo luật, bạn cần ít nhất cược vào  ${formatMoney(
           latestWinPrize
-        )} (50% coin ăn được ván trước) để chơi tiếp`
+        )} (50% tiền ăn được ván trước) để chơi tiếp`
       );
     }
-    await userRepo.plusCoin(user.discordID, -coin);
+    await userRepo.plusMoney(user.discordID, -money);
 
     const randomNumber = _.random(1, 4);
     const isOdd = randomNumber % 2 !== 0;
@@ -67,24 +67,24 @@ module.exports = {
     if (n > 6) {
       isWin = (isOdd && guessNumber === 8) || (!isOdd && guessNumber === 7);
       if (isWin) {
-        prize = coin * 3;
+        prize = money * 3;
 
-        user.latestWinPrize = prize - coin;
+        user.latestWinPrize = prize - money;
         await user.save();
       }
     } else {
       isWin = guessNumber === randomNumber;
       if (isWin) {
-        prize = coin * 8;
+        prize = money * 8;
 
-        user.latestWinPrize = prize - coin;
+        user.latestWinPrize = prize - money;
         await user.save();
       }
     }
     await interaction.followUp(
       `**${interaction.user.username}** đã ${
-        coinInput === 0 ? 'all in' : 'cược'
-      } ${formatCoin(coin)} để dự đoán số là **${
+        moneyInput === 0 ? 'all in' : 'cược'
+      } ${formatMoney(money)} để dự đoán số là **${
         guessNumber === 7 ? 'Chẵn' : guessNumber === 8 ? 'Lẻ' : guessNumber
       }**`
     );
@@ -93,11 +93,11 @@ module.exports = {
     });
 
     if (isWin) {
-      await userRepo.plusCoin(user.discordID, prize);
+      await userRepo.plusMoney(user.discordID, prize);
       return await interaction.followUp(
         `🔥🔥🔥 Kết quả là **${randomNumber}** - Chúc mừng **${
           interaction.user.username
-        }** đã thắng và nhận được ${formatCoin(prize)}`
+        }** đã thắng và nhận được ${formatMoney(prize)}`
       );
     } else {
       user.latestWinPrize = 0;
@@ -105,7 +105,7 @@ module.exports = {
       return await interaction.followUp(
         `💩💩💩 Kết quả là **${randomNumber}** - Ngài **${
           interaction.user.username
-        }** đã mất ${formatCoin(coin)}`
+        }** đã mất ${formatMoney(money)}`
       );
     }
   },

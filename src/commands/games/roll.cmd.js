@@ -1,13 +1,13 @@
 const { SlashCommandBuilder } = require('discord.js');
 const _ = require('underscore');
 const wait = require('node:timers/promises').setTimeout;
-const { rollData, generateRollAwardText } = require('./core/roll.core');
+const {
+  rollData,
+  generateRollAwardText,
+  getRollResult,
+} = require('./core/roll.core');
 const userRepo = require('../../core/repositories/user.repo');
-const formatCoin = require('../../utils/formatCoin');
-
-function randomItem() {
-  return _.sample(_.shuffle(rollData));
-}
+const formatMoney = require('../../utils/formatMoney');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -22,7 +22,7 @@ module.exports = {
         .setDescription('Roll game Slot 777')
         .addNumberOption((option) =>
           option
-            .setName('coin')
+            .setName('money')
             .setDescription('Số tiền cần cược - Nhập 0 để all in')
             .setMinValue(0)
             .setRequired(true)
@@ -38,14 +38,16 @@ module.exports = {
       return await interaction.followUp(prizeTableText);
     }
 
-    const coin =
-      interaction.options.getNumber('coin') === 0
-        ? user.coin
-        : interaction.options.getNumber('coin');
+    const money =
+      interaction.options.getNumber('money') === 0
+        ? user.money
+        : interaction.options.getNumber('money');
 
-    if (user.coin <= 0 || coin > user.coin) {
-      return interaction.followUp(`Bạn không đủ coin`);
+    if (user.money <= 0 || money > user.money) {
+      return interaction.followUp(`Bạn không đủ tiền để chơi`);
     }
+
+    const finalResult = getRollResult();
 
     const result = [
       {
@@ -62,20 +64,24 @@ module.exports = {
       },
     ];
 
-    await userRepo.plusCoin(interaction.user.id, -coin);
+    await userRepo.plusMoney(interaction.user.id, -money);
 
     await interaction.followUp(result.map((item) => item.name).join('  '));
-    const indexArray = _.shuffle([1, 0, 2]);
+    const indexArray = _.shuffle([0, 1, 2]);
 
-    result[indexArray.pop()] = randomItem();
+    async function updateResultText() {
+      await interaction.editReply(result.map((item) => item.name).join('  '));
+    }
+
+    result[indexArray.pop()] = finalResult[0];
     await wait(1500);
-    await interaction.editReply(result.map((item) => item.name).join('  '));
-    result[indexArray.pop()] = randomItem();
+    await updateResultText();
+    result[indexArray.pop()] = finalResult[1];
     await wait(1800);
-    await interaction.editReply(result.map((item) => item.name).join('  '));
-    result[indexArray.pop()] = randomItem();
+    await updateResultText();
+    result[indexArray.pop()] = finalResult[2];
     await wait(2100);
-    await interaction.editReply(result.map((item) => item.name).join('  '));
+    await updateResultText();
 
     const typeList = _.uniq(result.map((item) => item.name));
     const [first, second, third] = result;
@@ -86,7 +92,7 @@ module.exports = {
 
     if (isLost) {
       return await interaction.followUp(
-        `\n\n😧 **${interaction.user.username}** đã mất ${formatCoin(coin)}`
+        `\n\n😧 **${interaction.user.username}** đã mất ${formatMoney(money)}`
       );
     } else {
       let prize = 0;
@@ -94,13 +100,13 @@ module.exports = {
 
       if (isTriple) {
         prize =
-          rollData.find((item) => item.name === typeList[0]).value[1] * coin;
+          rollData.find((item) => item.name === typeList[0]).value[1] * money;
       } else {
         prize =
           (first.name === second.name
             ? rollData.find((item) => item.name === first.name).value[0]
             : rollData.find((item) => item.name === second.name).value[0]) *
-          coin;
+          money;
       }
 
       if (prize === 0) {
@@ -108,10 +114,10 @@ module.exports = {
           `\n\n💀**${interaction.user.username}** đã roll dính ô mất hết tiền\n\n`
         );
       } else {
-        await userRepo.plusCoin(interaction.user.id, prize);
+        await userRepo.plusMoney(interaction.user.id, prize);
 
         return await interaction.followUp(
-          `\n\n❤️‍🔥 **${interaction.user.username}** vừa nhận được ${formatCoin(
+          `\n\n❤️‍🔥 **${interaction.user.username}** vừa nhận được ${formatMoney(
             prize
           )}\n\n `
         );

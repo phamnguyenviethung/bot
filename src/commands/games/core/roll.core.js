@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const rollData = [
   {
     name: '🎅🏼',
@@ -51,7 +53,19 @@ function generateRollAwardText() {
   return text;
 }
 
+function getRollResult() {
+  const result = [];
+
+  for (let i = 0; i < 3; i++) {
+    const random = rollData[2];
+    result.push(random);
+  }
+
+  return _.shuffle(result);
+}
+
 module.exports = {
   rollData,
   generateRollAwardText,
+  getRollResult,
 };

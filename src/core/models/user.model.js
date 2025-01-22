@@ -9,7 +9,7 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      default: 'user',
+      default: roles.USER,
       enum: Object.values(roles),
     },
     money: {
@@ -18,12 +18,7 @@ const userSchema = new Schema(
       min: 0,
       set: (v) => Math.round(v),
     },
-    coin: {
-      type: Number,
-      default: 0,
-      min: 0,
-      set: (v) => Math.round(v),
-    },
+
     latestWinPrize: {
       type: Number,
       default: 0,

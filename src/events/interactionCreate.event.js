@@ -2,8 +2,6 @@ const User = require('../core/models/user.model');
 const { checkCooldown } = require('../core/services/cooldown.service');
 const { logger } = require('../configs/logger.config');
 const BotError = require('../utils/BotError');
-const statusService = require('../core/services/status.service');
-const rateService = require('../core/services/rate.service');
 
 const whiteList = ['dangky'];
 
@@ -28,8 +26,6 @@ module.exports = async (client, interaction) => {
 
       if (!command.noDefer) await interaction.deferReply();
 
-      await statusService.checkTimeJail(interaction.user.id);
-
       const isValidCooldown = await checkCooldown({
         client,
         command,
@@ -37,11 +33,7 @@ module.exports = async (client, interaction) => {
       });
 
       if (isValidCooldown) {
-        const economicRate = await rateService.getCacheRate();
-
-        logger.info(JSON.stringify(economicRate));
-
-        await command.run({ client, interaction, user, economicRate });
+        await command.run({ client, interaction, user });
       }
     } catch (error) {
       if (error instanceof BotError) {

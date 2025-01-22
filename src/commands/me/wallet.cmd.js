@@ -10,7 +10,6 @@ module.exports = {
   async run({ client, interaction, user }) {
     let text = `💰 **${interaction.user.username}** hiện có: \n\n`;
     text += `- Tiền: ${formatMoney(user.money)}\n`;
-    text += `- Coin: ${formatCoin(user.coin)}\n`;
     return await interaction.followUp(text);
   },
 };
