@@ -3,6 +3,7 @@ const { checkCooldown } = require('../core/services/cooldown.service');
 const { logger } = require('../configs/logger.config');
 const BotError = require('../utils/BotError');
 const redis = require('../configs/redis.config');
+const financeService = require('../core/services/finance.service');
 const whiteList = ['dangky'];
 
 module.exports = async (client, interaction) => {
@@ -33,7 +34,8 @@ module.exports = async (client, interaction) => {
       });
 
       if (isValidCooldown) {
-        await command.run({ client, interaction, user, redis });
+        const finRate = await financeService.getRate();
+        await command.run({ client, interaction, user, redis, finRate });
       }
     } catch (error) {
       if (error instanceof BotError) {

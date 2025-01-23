@@ -19,6 +19,11 @@ const userSchema = new Schema(
       set: (v) => Math.round(v),
     },
 
+    point: {
+      type: Number,
+      default: 10,
+      min: 0,
+    },
     latestWinPrize: {
       type: Number,
       default: 0,

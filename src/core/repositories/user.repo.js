@@ -10,12 +10,12 @@ class UserRepository {
     return await user.save();
   };
 
-  plusCoin = async (discordID, amount) => {
+  plusPoint = async (discordID, amount) => {
     const user = await User.findOne({
       discordID,
     });
 
-    user.coin += amount;
+    user.point += amount;
     return await user.save();
   };
 }
