@@ -12,6 +12,10 @@ const redis = new Redis({
   db: botConfig.redis.db, // Defaults to 0
 });
 
-redis.on('error', (err) => logger.error('Redis connection error:', err));
+redis.on('error', (err) => {
+  logger.error(err);
+
+  throw new Error('Failed to connect to Redis');
+});
 
 module.exports = redis;

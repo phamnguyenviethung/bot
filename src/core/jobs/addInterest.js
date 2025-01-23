@@ -3,7 +3,7 @@ const User = require('../models/user.model');
 const _ = require('lodash');
 const financeService = require('../services/finance.service');
 class AddInterestJob {
-  CRONJOB_EXPRESSION = '*/5 * * * *';
+  CRONJOB_EXPRESSION = '*/10 * * * *';
 
   run = async () => {
     try {
@@ -14,7 +14,7 @@ class AddInterestJob {
       await Promise.all(
         rs.map(async (u) => {
           const finRate = await financeService.getFinRate();
-          const r1 = u.money > finRate / 10 ? 3 : 1;
+          const r1 = u.money > finRate / 10 ? 1 : 3;
           const r2 = u.point >= 200 ? 1 : 0;
 
           const m = _.round((u.money * (r2 + r1)) / 100 + 100);

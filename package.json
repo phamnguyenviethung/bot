@@ -29,7 +29,6 @@
     "ioredis": "^5.4.2",
     "keyv": "^5.1.0",
     "lodash": "^4.17.21",
-    "mongo-express": "1.1.0-rc-3",
     "mongoose": "^8.9.5",
     "mongoose-autopopulate": "^1.1.0",
     "node-cron": "^3.0.3",
