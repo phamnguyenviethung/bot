@@ -26,8 +26,6 @@ const client = new Client({
   ],
 });
 
-db.connect();
-
 client.commands = new Collection();
 client.interactions = new Collection();
 client.cooldowns = new Collection();
@@ -35,5 +33,11 @@ client.cooldowns = new Collection();
 require(`./handlers/command.handler`)(client);
 require(`./handlers/event.handler`)(client);
 
-financeService.init();
-client.login(botConfig.token);
+const start = async () => {
+  await financeService.init();
+  await client.login(botConfig.token);
+  await db.connect();
+  require('./core/jobs/index');
+};
+
+start();

@@ -16,7 +16,6 @@ const userSchema = new Schema(
       type: Number,
       default: 0,
       min: 0,
-      set: (v) => Math.round(v),
     },
 
     point: {
