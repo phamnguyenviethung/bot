@@ -1,10 +1,8 @@
 const User = require('../models/user.model');
 const userRepo = require('../repositories/user.repo');
 const _ = require('lodash');
+const configService = require('./config.service');
 class UserService {
-  INC_PERCENT = 1;
-  DEC_PERCENT = 2;
-
   register = async (data) => {
     const user = await User.findOne({
       discordID: data.discordID,
@@ -18,6 +16,11 @@ class UserService {
   };
 
   incPointByWorking = async ({ discordID }) => {
+    const percent = await configService.getString(
+      'incPointByWorking',
+      String(1)
+    );
+
     const user = await User.findOne({
       discordID,
     });
@@ -25,10 +28,15 @@ class UserService {
       throw new Error('Không tìm thấy user');
     }
 
-    const point = 1 + _.round((user.point * this.INC_PERCENT) / 100);
+    const point = 1 + _.round((user.point * Number(percent)) / 100);
     await userRepo.plusPoint(discordID, point);
   };
   decPoint = async ({ discordID }) => {
+    const percent = await configService.getString(
+      'decPointByWorking',
+      String(2)
+    );
+
     const user = await User.findOne({
       discordID,
     });
@@ -36,7 +44,7 @@ class UserService {
       throw new Error('Không tìm thấy user');
     }
 
-    let point = _.round((user.point * this.INC_PERCENT) / 100);
+    let point = _.round((user.point * Number(percent)) / 100);
 
     if (point < 0 || point > user.point) {
       user.point = 0;

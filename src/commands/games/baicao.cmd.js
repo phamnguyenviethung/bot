@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
 const formatMoney = require('../../utils/formatMoney');
-const formatCoin = require('../../utils/formatCoin');
 const { startGame } = require('./core/baicao.core');
 const { AttachmentBuilder } = require('discord.js');
 const userRepo = require('../../core/repositories/user.repo');
@@ -18,7 +17,7 @@ module.exports = {
         .setMinValue(0)
         .setRequired(true)
     ),
-  async run({ client, interaction, user }) {
+  async run({ client, interaction, user, configService }) {
     const money =
       interaction.options.getNumber('money') === 0
         ? user.money
@@ -60,7 +59,13 @@ module.exports = {
     await interaction.editReply({
       files: [attachment],
     });
-    const prize = money * 3;
+
+    const prizeRate = await configService.getString(
+      'baicao-prizeRate',
+      String(3)
+    );
+
+    const prize = money * Number(prizeRate);
 
     if (isWin) {
       await userRepo.plusMoney(interaction.user.id, prize);

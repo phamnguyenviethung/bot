@@ -1,7 +1,8 @@
 const redis = require('../../configs/redis.config');
-const { LOW, MEDIUM, HIGH } = require('../../constants/flag.constant');
+const flagConstanst = require('../../constants/flag.constant');
 const financeService = require('./finance.service');
 const { logger } = require('../../configs/logger.config');
+const configService = require('./config.service');
 class UserFlagService {
   getKey = (userID) => {
     return `flag_${userID}`;
@@ -13,6 +14,11 @@ class UserFlagService {
   };
 
   setFlag = async ({ userID, prize }) => {
+    const { LOW, MEDIUM, HIGH } = await configService.getData(
+      'flagData',
+      flagConstanst
+    );
+
     const finRate = await financeService.getFinRate();
     const money = prize / finRate;
 

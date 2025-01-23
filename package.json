@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "load:config": "node src/loadConfig.js",
     "dev": "cross-env NODE_ENV=development nodemon src/main.js",
     "start": "cross-env NODE_ENV=production node src/main.js",
     "seed": "cross-env NODE_ENV=development node src/core/seed/seed.js",

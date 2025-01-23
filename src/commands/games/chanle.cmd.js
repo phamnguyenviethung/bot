@@ -4,6 +4,7 @@ const userRepo = require('../../core/repositories/user.repo');
 const formatMoney = require('../../utils/formatMoney');
 const userFlagService = require('../../core/services/userFlag.service');
 const { logger } = require('../../configs/logger.config');
+const configService = require('../../core/services/config.service');
 const choices = [
   {
     name: 'Chẵn',
@@ -57,7 +58,6 @@ module.exports = {
     const userFlag = await userFlagService.getUserFlag(user.discordID);
     let randomNumber = _.random(1, 4);
     if (!_.isEmpty(userFlag)) {
-      console.log(userFlag);
       randomNumber =
         _.random(0, 100) <= userFlag.winRate
           ? _.random(1, 4)
@@ -69,7 +69,11 @@ module.exports = {
     const isOdd = randomNumber % 2 !== 0;
 
     let isWin = (isOdd && guessNumber === 8) || (!isOdd && guessNumber === 7);
-    let prize = money * 2;
+    const prizeRate = await configService.getString(
+      'chanle-prizeRate',
+      String(2)
+    );
+    let prize = money * Number(prizeRate);
 
     if (isWin) {
       user.latestWinPrize = prize - money;

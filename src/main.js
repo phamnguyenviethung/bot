@@ -10,6 +10,7 @@ const {
 const botConfig = require('./configs/bot.config');
 const db = require('./configs/db.config');
 const financeService = require('./core/services/finance.service');
+const { logger } = require('./configs/logger.config');
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -34,10 +35,17 @@ require(`./handlers/command.handler`)(client);
 require(`./handlers/event.handler`)(client);
 
 const start = async () => {
-  await financeService.init();
-  await client.login(botConfig.token);
-  await db.connect();
-  require('./core/jobs/index');
+  try {
+    await db.connect();
+    await financeService.init();
+
+    await client.login(botConfig.token);
+
+    require('./core/jobs/index');
+  } catch (error) {
+    console.error(error);
+    logger.error('Failed to start the bot');
+  }
 };
 
 start();
