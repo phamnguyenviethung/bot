@@ -55,8 +55,9 @@ module.exports = {
     await userRepo.plusMoney(user.discordID, -money);
 
     const userFlag = await userFlagService.getUserFlag(user.discordID);
-    let randomNumber;
-    if (userFlag) {
+    let randomNumber = _.random(1, 4);
+    if (!_.isEmpty(userFlag)) {
+      console.log(userFlag);
       randomNumber =
         _.random(0, 100) <= userFlag.winRate
           ? _.random(1, 4)

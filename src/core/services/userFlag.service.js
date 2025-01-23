@@ -9,6 +9,7 @@ class UserFlagService {
 
   getUserFlag = async (userID) => {
     const key = this.getKey(userID);
+    logger.info(`TTL flag ${userID}: ${await redis.ttl(key)}`);
     return await redis.hgetall(key);
   };
 
@@ -26,7 +27,8 @@ class UserFlagService {
           ? LOW
           : MEDIUM;
 
-      await redis.hset(key, flag, flag.ttl);
+      await redis.hset(key, flag);
+      await redis.expire(key, flag.ttl);
       logger.info(`Set flag for ${userID} - ${flag.name}`);
     }
   };
