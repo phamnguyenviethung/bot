@@ -13,7 +13,7 @@ class UserFlagService {
   };
 
   setFlag = async ({ userID, prize }) => {
-    const finRate = await financeService.getRate();
+    const finRate = await financeService.getFinRate();
     const money = prize / finRate;
 
     if (money >= LOW.minMoneyToApplyRate) {

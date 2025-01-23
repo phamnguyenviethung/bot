@@ -2,20 +2,31 @@ const redis = require('../../configs/redis.config');
 const { logger } = require('../../configs/logger.config');
 class FinanceService {
   DEFAULT_RATE = 1000000;
+  BASE_SALARY_RATE = 1500;
 
   getKey = () => {
     return `fin`;
   };
 
-  getRate = async () => {
+  getBaseSalaryKey = () => {
+    return `fin_baseSalary`;
+  };
+
+  getFinRate = async () => {
     const rate = await redis.get(this.getKey());
     return rate;
   };
+  getBaseSalaryRate = async () => {
+    const rate = await redis.get(this.getBaseSalaryKey());
+    return rate;
+  };
 
-  initFinanceRate = async () => {
+  init = async () => {
     await redis.set(this.getKey(), this.DEFAULT_RATE);
+    await redis.set(this.getBaseSalaryRate(), this.BASE_SALARY_RATE);
+    logger.info(`Fin Rate: ${this.DEFAULT_RATE.toLocaleString('en-US')}`);
     logger.info(
-      `Init finance rate: ${this.DEFAULT_RATE.toLocaleString('en-US')}`
+      `Base Salary Rate: ${this.BASE_SALARY_RATE.toLocaleString('en-US')}`
     );
   };
 }

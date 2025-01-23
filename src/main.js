@@ -35,5 +35,5 @@ client.cooldowns = new Collection();
 require(`./handlers/command.handler`)(client);
 require(`./handlers/event.handler`)(client);
 
-financeService.initFinanceRate();
+financeService.init();
 client.login(botConfig.token);

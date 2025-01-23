@@ -34,8 +34,18 @@ module.exports = async (client, interaction) => {
       });
 
       if (isValidCooldown) {
-        const finRate = await financeService.getRate();
-        await command.run({ client, interaction, user, redis, finRate });
+        const finRate = await financeService.getFinRate();
+        const baseSalaryRate = await financeService.getBaseSalaryRate();
+        await command.run({
+          client,
+          interaction,
+          user,
+          redis,
+          rate: {
+            baseSalaryRate,
+            finRate,
+          },
+        });
       }
     } catch (error) {
       if (error instanceof BotError) {
