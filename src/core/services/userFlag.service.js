@@ -9,7 +9,6 @@ class UserFlagService {
 
   getUserFlag = async (userID) => {
     const key = this.getKey(userID);
-    logger.info(`TTL flag ${userID}: ${await redis.ttl(key)}`);
     return await redis.hgetall(key);
   };
 

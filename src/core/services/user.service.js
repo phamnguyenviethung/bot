@@ -25,7 +25,7 @@ class UserService {
       throw new Error('Không tìm thấy user');
     }
 
-    const point = _.round((user.point * this.INC_PERCENT) / 100);
+    const point = 1 + _.round((user.point * this.INC_PERCENT) / 100);
     await userRepo.plusPoint(discordID, point);
   };
   decPoint = async ({ discordID }) => {
