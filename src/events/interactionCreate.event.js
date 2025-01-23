@@ -2,7 +2,7 @@ const User = require('../core/models/user.model');
 const { checkCooldown } = require('../core/services/cooldown.service');
 const { logger } = require('../configs/logger.config');
 const BotError = require('../utils/BotError');
-
+const redis = require('../configs/redis.config');
 const whiteList = ['dangky'];
 
 module.exports = async (client, interaction) => {
@@ -33,7 +33,7 @@ module.exports = async (client, interaction) => {
       });
 
       if (isValidCooldown) {
-        await command.run({ client, interaction, user });
+        await command.run({ client, interaction, user, redis });
       }
     } catch (error) {
       if (error instanceof BotError) {

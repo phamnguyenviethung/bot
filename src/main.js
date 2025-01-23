@@ -9,6 +9,7 @@ const {
 } = require('discord.js');
 const botConfig = require('./configs/bot.config');
 const db = require('./configs/db.config');
+const financeService = require('./core/services/finance.service');
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -34,4 +35,5 @@ client.cooldowns = new Collection();
 require(`./handlers/command.handler`)(client);
 require(`./handlers/event.handler`)(client);
 
+financeService.initFinanceRate();
 client.login(botConfig.token);

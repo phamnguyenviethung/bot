@@ -50,12 +50,12 @@ module.exports = {
       files: [fakeAtt1],
     });
 
-    await wait(1800);
+    await wait(1500);
 
     await interaction.editReply({
       files: [fakeAtt2],
     });
-    await wait(2500);
+    await wait(2200);
 
     await interaction.editReply({
       files: [attachment],

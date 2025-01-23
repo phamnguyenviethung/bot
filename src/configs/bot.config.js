@@ -4,10 +4,10 @@ module.exports = {
   clientID: process.env.BOT_CLIENT_ID,
   MONGODB_URI: process.env.MONGODB_URI,
   redis: {
-    port: 6379,
-    host: 'localhost',
-    username: 'default',
-    password: '1234',
-    db: 2,
+    port: process.env.REDIS_PORT,
+    host: process.env.REDIS_HOST,
+    username: process.env.REDIS_USERNAME,
+    password: process.env.REDIS_PASSWORD,
+    db: process.env.REDIS_DB,
   },
 };

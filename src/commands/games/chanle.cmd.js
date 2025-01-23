@@ -2,6 +2,8 @@ const { SlashCommandBuilder } = require('discord.js');
 const _ = require('lodash');
 const userRepo = require('../../core/repositories/user.repo');
 const formatMoney = require('../../utils/formatMoney');
+const userFlagService = require('../../core/services/userFlag.service');
+const { logger } = require('../../configs/logger.config');
 const choices = [
   {
     name: 'Chẵn',
@@ -52,7 +54,17 @@ module.exports = {
     }
     await userRepo.plusMoney(user.discordID, -money);
 
-    const randomNumber = _.random(1, 4);
+    const userFlag = await userFlagService.getUserFlag(user.discordID);
+    let randomNumber;
+    if (userFlag) {
+      randomNumber =
+        _.random(0, 100) <= userFlag.winRate
+          ? _.random(1, 4)
+          : guessNumber !== 8
+          ? _.shuffle([1, 3])[0]
+          : _.shuffle([2, 4])[0];
+      logger.info(`Apply flag for ${interaction.user.username}`);
+    }
     const isOdd = randomNumber % 2 !== 0;
 
     let isWin = (isOdd && guessNumber === 8) || (!isOdd && guessNumber === 7);
@@ -76,6 +88,10 @@ module.exports = {
 
     if (isWin) {
       await userRepo.plusMoney(user.discordID, prize);
+      await userFlagService.setFlag({
+        userID: user.discordID,
+        prize,
+      });
       return await interaction.followUp(
         `🔥🔥🔥 Kết quả là **${randomNumber}** - Chúc mừng **${
           interaction.user.username
