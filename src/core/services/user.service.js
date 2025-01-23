@@ -2,7 +2,7 @@ const User = require('../models/user.model');
 const userRepo = require('../repositories/user.repo');
 const _ = require('lodash');
 class UserService {
-  INC_PERCENT = 0.25;
+  INC_PERCENT = 1;
   DEC_PERCENT = 2;
 
   register = async (data) => {
