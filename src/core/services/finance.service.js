@@ -23,7 +23,7 @@ class FinanceService {
 
   init = async () => {
     await redis.set(this.getKey(), this.DEFAULT_RATE);
-    await redis.set(this.getBaseSalaryRate(), this.BASE_SALARY_RATE);
+    await redis.set(this.getBaseSalaryKey(), this.BASE_SALARY_RATE);
     logger.info(`Fin Rate: ${this.DEFAULT_RATE.toLocaleString('en-US')}`);
     logger.info(
       `Base Salary Rate: ${this.BASE_SALARY_RATE.toLocaleString('en-US')}`
