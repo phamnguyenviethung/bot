@@ -9,8 +9,8 @@ const {
 } = require('discord.js');
 const botConfig = require('./configs/bot.config');
 const db = require('./configs/db.config');
-const financeService = require('./core/services/finance.service');
 const { logger } = require('./configs/logger.config');
+const setupData = require('./core/setupData');
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -37,11 +37,12 @@ require(`./handlers/event.handler`)(client);
 const start = async () => {
   try {
     await db.connect();
-    await financeService.init();
 
     await client.login(botConfig.token);
-
+    await client.user.setActivity('Fuck u', { type: 'WATCHING' });
     require('./core/jobs/index');
+
+    await setupData();
   } catch (error) {
     console.error(error);
     logger.error('Failed to start the bot');

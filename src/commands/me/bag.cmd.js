@@ -1,11 +1,13 @@
+const { SlashCommandBuilder } = require('discord.js');
+
+const inventoryService = require('../../core/services/inventory.service');
+
 const {
-  SlashCommandBuilder,
-  ActionRowBuilder,
+  ComponentType,
   ButtonBuilder,
   ButtonStyle,
-  ComponentType,
+  ActionRowBuilder,
 } = require('discord.js');
-const inventoryService = require('../../core/services/inventory.service');
 const { logger } = require('../../configs/logger.config');
 
 const buttonID = {
@@ -13,39 +15,27 @@ const buttonID = {
   next: 'bag-next',
 };
 
-const generateBagText = ({ data, itemType }) => {
-  let result = `\n==========\n**${itemType.toUpperCase()}**:\n==========\n`;
-
-  data.forEach((item) => {
-    result += `- **${item.name}**: ${item.quantity} \`${item.code}\`\n`;
-  });
-
-  return result;
-};
-
 module.exports = {
-  data: new SlashCommandBuilder().setName('bag').setDescription('Kho đồ'),
-  cooldown: 3,
-  async run({ client, interaction, user }) {
-    const inven = await inventoryService.getInvenByUserID(user._id);
+  cooldonw: 3,
+  data: new SlashCommandBuilder().setName('bag').setDescription('Balo cua toi'),
+  async run({ client, interaction, user, configService }) {
+    const data = await inventoryService.getUserInven(user._id);
 
-    if (!inven) {
-      return await interaction.followUp(`Bị gì rồi sir, hãy bão Hack`);
+    if (data.length === 0) {
+      return await interaction.followUp('Balo của bạn đang trống');
     }
 
     let currentPage = 1;
 
-    const generateText = () => {
-      const currentBagData = inven[currentPage - 1];
-      let text = generateBagText({
-        itemType: currentBagData.itemType,
-        data: currentBagData.itemData,
+    const genText = () => {
+      const current = data[currentPage - 1];
+      let typeText = `\n\n**${current.type}**\n\n`;
+      current.items.forEach(({ item, quantity }) => {
+        typeText += `- ${item.name} **x${quantity}** \`${item.code}\`\n`;
       });
 
-      return text;
+      return typeText;
     };
-
-    const text = generateText();
 
     // Button
     const prevButton = new ButtonBuilder()
@@ -58,12 +48,14 @@ module.exports = {
       .setCustomId(buttonID.next)
       .setLabel('Tiếp')
       .setStyle(ButtonStyle.Success)
-      .setDisabled(inven.length === 1 || currentPage === inven.length);
+      .setDisabled(data.length === 1 || currentPage === data.length);
 
     const row = new ActionRowBuilder().addComponents(prevButton, nextButton);
 
     const reply = await interaction.followUp({
-      content: `🧰** ${interaction.user.username}** hiện có:\n${text}\n\n`,
+      content: `👜 **Balo của ${
+        interaction.user.username
+      }** hiện có:${genText()} \n\n`,
       components: [row],
     });
     const filter = (i) => i.user.id === interaction.user.id;
@@ -87,13 +79,13 @@ module.exports = {
 
         await prevButton.setDisabled(currentPage === 1);
         await nextButton.setDisabled(
-          currentPage === inven.length || inven.length === 1
+          currentPage === data.length || data.length === 1
         );
 
-        let newText = generateText();
-
         return await interaction.editReply({
-          content: `🧰** ${interaction.user.username}** hiện có:\n${newText}\n\n`,
+          content: `🧰** ${
+            interaction.user.username
+          }** hiện có:\n${genText()}\n\n`,
           components: [row],
         });
       } catch (error) {

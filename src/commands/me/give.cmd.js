@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { giveToOtherUser } = require('./core/give.core');
 const BotError = require('../../utils/BotError');
+const inventoryService = require('../../core/services/inventory.service');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -28,19 +28,15 @@ module.exports = {
       throw new BotError('Không thể tự chuyển cho chính mình');
     }
 
-    const res = await giveToOtherUser({
-      sender: user,
-      receiverID: u.id,
-      itemCode,
+    const { item } = await inventoryService.give({
+      ownerID: user._id,
+      targetID: u.id,
+      code: itemCode.toLowerCase(),
       quantity,
     });
 
-    if (!res.success) {
-      throw new BotError(res.message);
-    }
-
     return await interaction.followUp(
-      `💰 **${interaction.user.username}** vừa đưa **${quantity} ${res.data.item.name}** cho ${u.username}`
+      `💰 **${interaction.user.username}** vừa đưa **${quantity} ${item.name}** \`${item.code}\` cho ${u.username}`
     );
   },
 };

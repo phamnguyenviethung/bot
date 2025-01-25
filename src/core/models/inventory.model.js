@@ -7,20 +7,16 @@ const inventorySchema = new Schema(
       required: true,
       unqiue: true,
     },
-    items: [
-      {
-        item: {
-          type: Schema.Types.ObjectId,
-          ref: 'Item',
-          required: true,
-        },
-        quantity: {
-          type: Number,
-          required: true,
-          min: 0,
-        },
-      },
-    ],
+    quantity: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    item: {
+      type: Schema.Types.ObjectId,
+      ref: 'Item',
+      required: true,
+    },
   },
   {
     timestamps: true,

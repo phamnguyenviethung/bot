@@ -14,20 +14,21 @@ class FinanceService {
 
   getFinRate = async () => {
     const rate = await redis.get(this.getKey());
+    if (!rate) {
+      await redis.set(this.getKey(), this.DEFAULT_RATE);
+
+      return this.DEFAULT_RATE;
+    }
     return rate;
   };
   getBaseSalaryRate = async () => {
     const rate = await redis.get(this.getBaseSalaryKey());
-    return rate;
-  };
+    if (!rate) {
+      await redis.set(this.getKey(), this.BASE_SALARY_RATE);
 
-  init = async () => {
-    await redis.set(this.getKey(), this.DEFAULT_RATE);
-    await redis.set(this.getBaseSalaryKey(), this.BASE_SALARY_RATE);
-    logger.info(`Fin Rate: ${this.DEFAULT_RATE.toLocaleString('en-US')}`);
-    logger.info(
-      `Base Salary Rate: ${this.BASE_SALARY_RATE.toLocaleString('en-US')}`
-    );
+      return this.BASE_SALARY_RATE;
+    }
+    return rate;
   };
 }
 
