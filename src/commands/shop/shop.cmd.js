@@ -1,27 +1,55 @@
-const inventoryService = require('../../core/services/inventory.service');
-
 const {
+  SlashCommandBuilder,
   ComponentType,
   ButtonBuilder,
   ButtonStyle,
-  SlashCommandBuilder,
   ActionRowBuilder,
 } = require('discord.js');
+const userRepo = require('../../core/repositories/user.repo');
+const _ = require('lodash');
+const formatMoney = require('../../utils/formatMoney');
+const userService = require('../../core/services/user.service');
+const itemService = require('../../core/services/item.service');
 const { logger } = require('../../configs/logger.config');
 
 const buttonID = {
-  prev: 'bag-prev',
-  next: 'bag-next',
+  prev: 'shop-prev',
+  next: 'shop-next',
 };
 
+const TAPHOA = 'taphoa';
+const CHODEN = 'choden';
+
+const locations = [
+  {
+    name: 'Tạp hoá',
+    value: TAPHOA,
+  },
+  {
+    name: 'Chợ đen',
+    value: CHODEN,
+  },
+];
+
 module.exports = {
-  cooldonw: 3,
-  data: new SlashCommandBuilder().setName('bag').setDescription('Balo cua toi'),
-  async run({ client, interaction, user, configService }) {
-    const data = await inventoryService.getUserInven(user._id);
+  cooldown: 3,
+  data: new SlashCommandBuilder()
+    .setName('shop')
+    .setDescription('Đi chợ mua đồ')
+    .addStringOption((opt) =>
+      opt
+        .setName('vitri')
+        .setDescription('Chọn vị trí')
+        .setRequired(true)
+        .addChoices(...locations)
+    ),
+  async run({ client, interaction, rate, user }) {
+    const n = interaction.options.getString('vitri');
+
+    const data = await itemService.getGroupItemByTags(n);
 
     if (data.length === 0) {
-      return await interaction.followUp('Balo của bạn đang trống');
+      return await interaction.followUp('Không có hàng');
     }
 
     let currentPage = 1;
@@ -29,14 +57,14 @@ module.exports = {
     const genText = () => {
       const current = data[currentPage - 1];
       let typeText = `\n\n**${current.type}**\n\n`;
-      current.items.forEach(({ item, quantity }) => {
-        typeText += `- ${item.name} **x${quantity}** \`${item.code}\`\n`;
+      current.items.forEach((item) => {
+        typeText += `- ${item.name}: ${formatMoney(item.price)} \`${
+          item.code
+        }\`\n`;
       });
 
       return typeText;
     };
-
-    // Button
     const prevButton = new ButtonBuilder()
       .setCustomId(buttonID.prev)
       .setLabel('Lùi')
@@ -52,9 +80,7 @@ module.exports = {
     const row = new ActionRowBuilder().addComponents(prevButton, nextButton);
 
     const reply = await interaction.followUp({
-      content: `👜 **Balo của ${
-        interaction.user.username
-      }** hiện có:${genText()} \n\n`,
+      content: `${genText()} \n\n`,
       components: [row],
     });
     const filter = (i) => i.user.id === interaction.user.id;
@@ -82,9 +108,7 @@ module.exports = {
         );
 
         return await interaction.editReply({
-          content: `👜 ** ${
-            interaction.user.username
-          }** hiện có:\n${genText()}\n\n`,
+          content: `${genText()}\n\n`,
           components: [row],
         });
       } catch (error) {

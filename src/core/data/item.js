@@ -7,7 +7,8 @@ const items = [
     code: 'dao',
     name: 'Dao',
     type: ItemTypes.WEAPON,
-    tags: ['vũ khí'],
+    tags: ['choden'],
+    price: 200000,
     attributes: [],
   },
 ];
@@ -19,7 +20,10 @@ const initItemData = async () => {
           {
             code: i.code,
           },
-          i,
+          {
+            isActive: true,
+            ...i,
+          },
           {
             upsert: true,
             new: true,
