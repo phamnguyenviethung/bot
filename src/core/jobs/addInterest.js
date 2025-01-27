@@ -3,7 +3,7 @@ const User = require('../models/user.model');
 const _ = require('lodash');
 const financeService = require('../services/finance.service');
 class AddInterestJob {
-  CRONJOB_EXPRESSION = '*/5 * * * *';
+  CRONJOB_EXPRESSION = '*/20 * * * *';
 
   run = async () => {
     try {
@@ -15,7 +15,7 @@ class AddInterestJob {
         rs.map(async (u) => {
           const percent = await financeService.calcInterestPercent(u);
 
-          const m = _.round(u.money * (percent / 100) + 100);
+          const m = _.round(u.money * (percent / 100));
           return await User.findOneAndUpdate(
             {
               discordID: u.discordID,

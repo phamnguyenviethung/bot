@@ -48,11 +48,11 @@ class FinanceService {
     if (!rate) {
       let result = 0;
       const rate = await this.getFinRate();
-      result += user.money > _.round(rate / 3) ? 0 : 2;
-      result += user.point >= 800 ? 5 : 2;
+      result += user.money > _.round(rate / 3) ? 0 : 1;
+      result += user.point >= 800 ? 3 : 2;
 
       await redis.set(key, String(result));
-      await redis.expire(key, 60 * 15);
+      await redis.expire(key, 600);
       return result;
     }
     return Number(rate);
