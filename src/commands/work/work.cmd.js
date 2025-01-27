@@ -10,7 +10,7 @@ module.exports = {
     .setDescription('lam viec kiem tien'),
   async run({ client, interaction, rate, user }) {
     const baseSalary = _.round(rate.baseSalaryRate);
-    const userRate = user.point * 2 + (user.money * 1) / 100;
+    const userRate = user.point * 2 + user.money * 0.00001;
 
     const randomMoney = _.round(userRate + baseSalary);
     await userRepo.plusMoney(interaction.user.id, randomMoney);
