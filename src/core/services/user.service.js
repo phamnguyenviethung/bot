@@ -18,7 +18,7 @@ class UserService {
   incPointByWorking = async ({ discordID }) => {
     const percent = await configService.getString(
       'incPointByWorking',
-      String(1)
+      String(2)
     );
 
     const user = await User.findOne({
@@ -34,7 +34,7 @@ class UserService {
   decPoint = async ({ discordID }) => {
     const percent = await configService.getString(
       'decPointByWorking',
-      String(2)
+      String(4)
     );
 
     const user = await User.findOne({

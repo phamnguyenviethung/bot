@@ -8,6 +8,7 @@ const {
 } = require('./core/roll.core');
 const userRepo = require('../../core/repositories/user.repo');
 const formatMoney = require('../../utils/formatMoney');
+const userService = require('../../core/services/user.service');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -84,14 +85,14 @@ module.exports = {
     await updateResultText();
 
     const typeList = _.uniq(result.map((item) => item.name));
-    const [first, second, third] = result;
+    const [first, second] = result;
 
     const isLost =
       typeList.length > 2 ||
       (result[0].name === result[2].name && typeList.length === 2);
 
     if (isLost) {
-      return await interaction.followUp(
+      await interaction.followUp(
         `\n\n😧 **${interaction.user.username}** đã mất ${formatMoney(money)}`
       );
     } else {
@@ -110,18 +111,20 @@ module.exports = {
       }
 
       if (prize === 0) {
-        return await interaction.followUp(
+        await interaction.followUp(
           `\n\n💀**${interaction.user.username}** đã roll dính ô mất hết tiền\n\n`
         );
       } else {
         await userRepo.plusMoney(interaction.user.id, prize);
 
-        return await interaction.followUp(
+        await interaction.followUp(
           `\n\n❤️‍🔥 **${interaction.user.username}** vừa nhận được ${formatMoney(
             prize
           )}\n\n `
         );
       }
     }
+
+    await userService.decPoint({ discordID: interaction.user.id });
   },
 };

@@ -3,6 +3,7 @@ const formatMoney = require('../../utils/formatMoney');
 const { startGame } = require('./core/baicao.core');
 const { AttachmentBuilder } = require('discord.js');
 const userRepo = require('../../core/repositories/user.repo');
+const userService = require('../../core/services/user.service');
 const wait = require('node:timers/promises').setTimeout;
 
 module.exports = {
@@ -78,5 +79,6 @@ module.exports = {
         )}`;
 
     await interaction.followUp(msg);
+    await userService.decPoint({ discordID: interaction.user.id });
   },
 };

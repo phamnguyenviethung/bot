@@ -9,15 +9,10 @@ module.exports = {
     .setName('work')
     .setDescription('lam viec kiem tien'),
   async run({ client, interaction, rate, user }) {
-    const baseSalary = _.random(
-      _.round(rate.baseSalaryRate * 0.6),
-      rate.baseSalaryRate
-    );
-    const userRate = user.point * 0.25 + user.money * 0.0001;
+    const baseSalary = _.round(rate.baseSalaryRate);
+    const userRate = user.point * 2 + (user.money * 1) / 100;
 
-    const workRate = _.round(userRate + rate.finRate / 1000000);
-    const randomMoney =
-      _.random(_.round(workRate * 0.6), workRate) + baseSalary;
+    const randomMoney = _.round(userRate + baseSalary);
     await userRepo.plusMoney(interaction.user.id, randomMoney);
     await userService.incPointByWorking({ discordID: interaction.user.id });
 

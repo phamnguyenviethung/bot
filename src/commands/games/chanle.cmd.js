@@ -5,6 +5,7 @@ const formatMoney = require('../../utils/formatMoney');
 const userFlagService = require('../../core/services/userFlag.service');
 const { logger } = require('../../configs/logger.config');
 const configService = require('../../core/services/config.service');
+const userService = require('../../core/services/user.service');
 const choices = [
   {
     name: 'Chẵn',
@@ -97,7 +98,7 @@ module.exports = {
         userID: user.discordID,
         prize,
       });
-      return await interaction.followUp(
+      await interaction.followUp(
         `🔥🔥🔥 Kết quả là **${randomNumber}** - Chúc mừng **${
           interaction.user.username
         }** đã thắng và nhận được ${formatMoney(prize)}`
@@ -105,11 +106,13 @@ module.exports = {
     } else {
       user.latestWinPrize = 0;
       await user.save();
-      return await interaction.followUp(
+      await interaction.followUp(
         `💩💩💩 Kết quả là **${randomNumber}** - Ngài **${
           interaction.user.username
         }** đã mất ${formatMoney(money)}`
       );
     }
+
+    await userService.decPoint({ discordID: interaction.user.id });
   },
 };
